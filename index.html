@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контроль выполнения работы</title>
+    <title>Style Advisor — Подбор одежды</title>
     <style>
         :root {
             --primary: #667eea;
@@ -11,7 +11,7 @@
             --success: #28a745;
             --danger: #dc3545;
             --warning: #ffc107;
-            --bg: #f8f9fa;
+            --bg: #f5f5f7;
             --card-bg: #ffffff;
             --text: #1d1d1f;
             --text-light: #6e6e73;
@@ -34,6 +34,7 @@
 
         .app-wrapper { width: 100%; max-width: 900px; }
 
+        /* Навигация */
         .nav-tabs {
             display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
             background: rgba(255,255,255,0.15); padding: 6px; border-radius: 20px;
@@ -46,6 +47,7 @@
         .nav-tab.active { background: white; color: var(--primary); font-weight: 600; }
         .nav-tab:hover:not(.active) { background: rgba(255,255,255,0.2); }
 
+        /* Страницы */
         .page { display: none; width: 100%; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -78,7 +80,6 @@
         }
         .btn-primary { background: var(--primary); color: white; width: 100%; }
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-success { background: var(--success); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-warning { background: var(--warning); color: #333; }
@@ -92,72 +93,91 @@
         .message { text-align: center; margin-top: 14px; min-height: 20px; font-size: 14px; }
         .message.error { color: var(--danger); }
         .message.success { color: var(--success); }
-        .message.info { color: #17a2b8; }
 
-        /* Чеклист */
-        .checklist-item {
-            display: flex; align-items: center; padding: 14px 16px;
-            margin: 8px 0; background: var(--bg); border-radius: 10px;
-            gap: 12px; transition: all 0.2s; border: 2px solid transparent;
+        /* Опрос */
+        .question-group { margin-bottom: 24px; }
+        .question-label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 16px; }
+        .badge { font-size: 12px; background: #e8e8ed; color: var(--text-light); padding: 2px 8px; border-radius: 10px; font-weight: 400; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        .option-card {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            padding: 16px 12px; border: 2px solid var(--border); border-radius: 12px;
+            cursor: pointer; transition: all 0.2s; text-align: center; font-weight: 500; font-size: 14px;
+            background: var(--card-bg);
         }
-        .checklist-item:hover { background: #eef; border-color: #dde; }
-        .checklist-item input[type="checkbox"] {
-            width: 22px; height: 22px; cursor: pointer;
-            accent-color: var(--primary); flex-shrink: 0;
-        }
-        .item-text { flex: 1; font-size: 16px; word-break: break-word; }
-        .item-text.completed { text-decoration: line-through; color: #999; }
+        .option-card:hover { border-color: var(--primary); background: #f8f8ff; }
+        .option-icon { font-size: 28px; }
+        .options-grid input[type="radio"] { display: none; }
+        .options-grid input[type="radio"]:checked + .option-card { border-color: var(--primary); background: #f0eeff; color: var(--primary); }
 
-        .progress-bar {
-            width: 100%; height: 10px; background: #e0e0e0;
-            border-radius: 5px; margin-top: 12px; overflow: hidden;
+        /* Результат */
+        .result-card { text-align: center; }
+        .outfit-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 30px 0; }
+        .outfit-item {
+            background: #f9f9fb; border-radius: var(--radius);
+            padding: 20px; min-width: 140px; text-align: center;
         }
-        .progress-fill {
-            height: 100%; background: linear-gradient(90deg, var(--primary), #764ba2);
-            border-radius: 5px; transition: width 0.5s ease;
-        }
+        .outfit-item img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; background: #e0e0e0; }
+        .outfit-item .item-category { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
+        .outfit-item .item-name { font-weight: 600; margin-top: 4px; }
+        .result-actions { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .empty-wardrobe-warning { margin-top: 20px; padding: 16px; background: #fff3cd; border-radius: 10px; }
 
-        /* Код восстановления */
-        .code-display {
-            background: #1a1a2e; color: #0f0; padding: 24px;
-            border-radius: 10px; text-align: center; font-size: 36px;
-            font-family: 'Courier New', monospace; letter-spacing: 8px;
-            margin: 16px 0;
+        /* Каталог */
+        .catalog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        .filters { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border);
+            background: var(--card-bg); cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s;
         }
+        .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .filter-btn:hover:not(.active) { border-color: var(--primary); }
+        .wardrobe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; margin-bottom: 30px; }
+        .wardrobe-item {
+            background: var(--card-bg); border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow); transition: transform 0.2s;
+        }
+        .wardrobe-item:hover { transform: translateY(-4px); }
+        .wardrobe-item img { width: 100%; height: 160px; object-fit: cover; background: #e0e0e0; }
+        .wardrobe-item .item-info { padding: 12px; }
+        .wardrobe-item .item-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .wardrobe-item .item-meta { font-size: 12px; color: var(--text-light); }
+        .empty-state { text-align: center; padding: 60px 20px; }
+        .empty-icon { font-size: 64px; margin-bottom: 16px; }
+        .data-actions { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
 
-        /* Маркетплейсы */
-        .marketplace-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 14px; margin-top: 20px;
+        /* Модалка */
+        .modal {
+            position: fixed; inset: 0; z-index: 200;
+            display: flex; align-items: center; justify-content: center;
         }
-        .marketplace-card {
-            border: 2px solid var(--border); border-radius: var(--radius);
-            padding: 24px 16px; text-align: center; transition: all 0.2s;
-            cursor: pointer; text-decoration: none; color: var(--text);
+        .modal.hidden { display: none; }
+        .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+        .modal-content {
+            position: relative; background: var(--card-bg); border-radius: var(--radius);
+            padding: 30px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;
         }
-        .marketplace-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-        .marketplace-icon { font-size: 40px; margin-bottom: 10px; }
+        .modal-close { position: absolute; top: 16px; right: 20px; font-size: 28px; background: none; border: none; cursor: pointer; }
+        .photo-upload input[type="file"] { display: none; }
+        .photo-preview {
+            border: 2px dashed var(--border); border-radius: 10px;
+            padding: 40px; text-align: center; cursor: pointer; color: var(--text-light);
+            min-height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .photo-preview img { max-width: 100%; max-height: 200px; border-radius: 8px; }
 
         /* Поддержать */
         .donate-container { display: flex; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
-        .donate-qr {
-            flex: 0 0 260px; text-align: center;
-            background: var(--bg); border-radius: var(--radius); padding: 20px;
-        }
+        .donate-qr { flex: 0 0 260px; text-align: center; background: var(--bg); border-radius: var(--radius); padding: 20px; }
         .donate-qr img { width: 200px; height: 200px; border-radius: 8px; }
         .donate-info { flex: 1; min-width: 280px; }
-        .highlight {
-            background: #f0eeff; padding: 16px; border-radius: 10px;
-            margin: 12px 0; border-left: 4px solid var(--primary);
-        }
+        .highlight { background: #f0eeff; padding: 16px; border-radius: 10px; margin: 12px 0; border-left: 4px solid var(--primary); }
         .donate-amounts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
         .donate-amount {
-            padding: 10px 20px; border: 2px solid var(--border);
-            border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+            padding: 10px 20px; border: 2px solid var(--border); border-radius: 10px;
+            cursor: pointer; font-weight: 600; transition: all 0.2s;
         }
-        .donate-amount:hover, .donate-amount.selected {
-            border-color: var(--primary); background: #f0eeff;
-        }
+        .donate-amount:hover, .donate-amount.selected { border-color: var(--primary); background: #f0eeff; }
 
         /* Toast */
         .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; }
@@ -171,16 +191,20 @@
         .toast.info { background: #17a2b8; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+        .progress-bar { width: 100%; height: 10px; background: #e0e0e0; border-radius: 5px; margin-top: 12px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #764ba2); border-radius: 5px; transition: width 0.5s ease; }
+
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
         th { background: var(--bg); font-weight: 600; font-size: 14px; }
 
         @media (max-width: 600px) {
             .card { padding: 20px; }
-            .marketplace-grid { grid-template-columns: repeat(2, 1fr); }
+            .options-grid { grid-template-columns: repeat(2, 1fr); }
+            .wardrobe-grid { grid-template-columns: repeat(2, 1fr); }
+            .outfit-display { flex-direction: column; align-items: center; }
             .donate-container { flex-direction: column; align-items: center; }
             .nav-tab { padding: 8px 14px; font-size: 13px; }
-            .code-display { font-size: 24px; letter-spacing: 4px; }
         }
     </style>
 </head>
@@ -188,8 +212,8 @@
     <div class="app-wrapper">
         <!-- Навигация -->
         <div class="nav-tabs" id="navTabs" style="display:none;">
-            <button class="nav-tab active" data-page="checklist">📋 Чеклист</button>
-            <button class="nav-tab" data-page="shop">🛒 Магазин</button>
+            <button class="nav-tab active" data-page="survey">✨ Подбор</button>
+            <button class="nav-tab" data-page="catalog">👗 Гардероб</button>
             <button class="nav-tab" data-page="donate">❤️ Поддержать</button>
             <button class="nav-tab" data-page="profile">👤 Профиль</button>
             <button class="nav-tab" data-page="admin" id="adminTab" style="display:none;">⚙️ Админ</button>
@@ -198,7 +222,8 @@
         <!-- ==================== ВХОД ==================== -->
         <div class="page active" id="loginPage">
             <div class="card">
-                <h2>🔐 Вход в систему</h2>
+                <h2>👔 Style Advisor</h2>
+                <p style="text-align:center; color:var(--text-light);">Войдите, чтобы подбирать луки из своего гардероба</p>
                 <div class="form-group"><label>Логин</label><input type="text" id="loginInput" placeholder="user1"></div>
                 <div class="form-group"><label>Пароль</label><input type="password" id="passwordInput" placeholder="••••"></div>
                 <button class="btn btn-primary" onclick="App.login()">Войти</button>
@@ -213,8 +238,8 @@
         <div class="page" id="registerPage">
             <div class="card">
                 <h2>📝 Регистрация</h2>
-                <div class="form-group"><label>Имя</label><input type="text" id="regName" placeholder="Иван Иванов"></div>
-                <div class="form-group"><label>Логин (мин. 3 символа)</label><input type="text" id="regLogin" placeholder="ivan2024"></div>
+                <div class="form-group"><label>Имя</label><input type="text" id="regName" placeholder="Анна"></div>
+                <div class="form-group"><label>Логин (мин. 3 символа)</label><input type="text" id="regLogin" placeholder="anna"></div>
                 <div class="form-group"><label>Пароль (мин. 4 символа)</label><input type="password" id="regPassword" placeholder="••••"></div>
                 <button class="btn btn-primary" onclick="App.register()">Зарегистрироваться</button>
                 <button class="btn btn-outline" onclick="App.showPage('loginPage')">← Назад ко входу</button>
@@ -227,81 +252,104 @@
         <div class="page" id="resetPage">
             <div class="card">
                 <h2>🔑 Восстановление пароля</h2>
-                <p style="color:var(--text-light); margin-bottom:16px;">
-                    Введите ваш логин. Код восстановления появится на экране.
-                    <br><strong>⚠️ Это демо-режим. В реальном проекте код отправляется на email.</strong>
-                </p>
+                <p style="color:var(--text-light);">Введите логин. Код появится на экране (демо-режим).</p>
                 <div class="form-group"><label>Логин</label><input type="text" id="resetLogin" placeholder="user1"></div>
                 <button class="btn btn-primary" onclick="App.sendResetCode()">Получить код</button>
-                
                 <div id="resetCodeSection" style="display:none; margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
-                    <p style="text-align:center; font-weight:600;">Ваш код восстановления:</p>
-                    <div class="code-display" id="resetCodeDisplay">------</div>
-                    <p style="text-align:center; font-size:12px; color:var(--text-light);">Код действителен 10 минут</p>
-                    
-                    <div class="form-group" style="margin-top:16px;"><label>Введите код</label><input type="text" id="resetCodeInput" placeholder="6 цифр" maxlength="6"></div>
-                    <div class="form-group"><label>Новый пароль (мин. 4 символа)</label><input type="password" id="resetNewPassword" placeholder="••••"></div>
+                    <p style="text-align:center; font-weight:600;">Код восстановления:</p>
+                    <div style="background:#1a1a2e; color:#0f0; padding:24px; border-radius:10px; text-align:center; font-size:36px; font-family:monospace; letter-spacing:8px; margin:16px 0;" id="resetCodeDisplay">------</div>
+                    <div class="form-group"><label>Введите код</label><input type="text" id="resetCodeInput" placeholder="6 цифр" maxlength="6"></div>
+                    <div class="form-group"><label>Новый пароль</label><input type="password" id="resetNewPassword" placeholder="••••"></div>
                     <button class="btn btn-primary" onclick="App.resetPassword()">Сменить пароль</button>
                 </div>
-                
                 <button class="btn btn-outline" onclick="App.showPage('loginPage')">← Назад ко входу</button>
                 <div class="message error" id="resetError"></div>
                 <div class="message success" id="resetSuccess"></div>
             </div>
         </div>
 
-        <!-- ==================== ЧЕКЛИСТ ==================== -->
-        <div class="page" id="checklistPage">
+        <!-- ==================== ПОДБОР (ОПРОС) ==================== -->
+        <div class="page" id="surveyPage">
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
-                    <h2 style="margin:0;">📋 Контроль выполнения</h2>
-                    <div style="display:flex; gap:8px;">
-                        <button class="btn btn-warning btn-sm" onclick="App.resetChecklist()">🔄 Сбросить</button>
-                        <button class="btn btn-success btn-sm" onclick="App.syncToGitHub()">☁️ Синхронизировать</button>
+                <h2>✨ Что надеть сегодня?</h2>
+                <p class="subtitle" style="color:var(--text-light); margin-bottom:24px;">Ответь на 2 вопроса — получи готовый лук</p>
+                <form id="surveyForm" onsubmit="return false;">
+                    <div class="question-group">
+                        <label class="question-label">Куда собираешься?</label>
+                        <div class="options-grid" id="occasionOptions">
+                            <input type="radio" name="occasion" value="office" id="occ-office">
+                            <label for="occ-office" class="option-card"><span class="option-icon">💼</span>В офис</label>
+                            <input type="radio" name="occasion" value="casual" id="occ-casual">
+                            <label for="occ-casual" class="option-card"><span class="option-icon">☕</span>Прогулка</label>
+                            <input type="radio" name="occasion" value="sport" id="occ-sport">
+                            <label for="occ-sport" class="option-card"><span class="option-icon">🏃</span>Спорт</label>
+                            <input type="radio" name="occasion" value="party" id="occ-party">
+                            <label for="occ-party" class="option-card"><span class="option-icon">🎉</span>Вечеринка</label>
+                            <input type="radio" name="occasion" value="date" id="occ-date">
+                            <label for="occ-date" class="option-card"><span class="option-icon">🌹</span>Свидание</label>
+                        </div>
                     </div>
-                </div>
-                
-                <div id="checklistContainer"></div>
-                
-                <div style="display:flex; gap:10px; margin-top:18px;">
-                    <input type="text" id="newItemInput" placeholder="Название нового этапа..." style="flex:1; padding:14px; border:2px solid var(--border); border-radius:10px; font-size:16px;" onkeypress="if(event.key==='Enter')App.addItem()">
-                    <button class="btn btn-primary" onclick="App.addItem()" style="width:auto; padding:14px 20px;">+</button>
-                </div>
-                
-                <div style="margin-top:20px; text-align:center;">
-                    <strong id="statsText" style="font-size:15px;"></strong>
-                    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
-                </div>
-                <p style="text-align:center; font-size:12px; color:var(--text-light); margin-top:6px;" id="syncStatus">💾 Данные на этом устройстве</p>
+                    <div class="question-group">
+                        <label class="question-label">Какая погода?</label>
+                        <div class="options-grid" id="weatherOptions">
+                            <input type="radio" name="weather" value="winter" id="wth-winter">
+                            <label for="wth-winter" class="option-card"><span class="option-icon">❄️</span>Холодно</label>
+                            <input type="radio" name="weather" value="demi" id="wth-demi">
+                            <label for="wth-demi" class="option-card"><span class="option-icon">🍂</span>Прохладно</label>
+                            <input type="radio" name="weather" value="summer" id="wth-summer">
+                            <label for="wth-summer" class="option-card"><span class="option-icon">☀️</span>Тепло</label>
+                            <input type="radio" name="weather" value="rain" id="wth-rain">
+                            <label for="wth-rain" class="option-card"><span class="option-icon">🌧️</span>Дождь</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="App.getOutfit()">Подобрать лук ✨</button>
+                </form>
             </div>
         </div>
 
-        <!-- ==================== МАГАЗИН ==================== -->
-        <div class="page" id="shopPage">
+        <!-- ==================== РЕЗУЛЬТАТ ==================== -->
+        <div class="page" id="resultPage">
+            <div class="card result-card">
+                <h2>✨ Твой лук готов!</h2>
+                <p style="color:var(--text-light);" id="resultDescription"></p>
+                <div class="outfit-display" id="outfitContainer"></div>
+                <div class="result-actions">
+                    <button class="btn btn-outline" onclick="App.getOutfit()" style="width:auto;">🔄 Подобрать другой</button>
+                    <button class="btn btn-primary" onclick="App.showPage('surveyPage')" style="width:auto;">📋 Новый опрос</button>
+                </div>
+                <div class="empty-wardrobe-warning" id="emptyWarning" style="display:none;">
+                    <p>⚠️ В гардеробе нет подходящих вещей.</p>
+                    <button class="btn btn-outline" onclick="App.showPage('catalogPage')" style="width:auto;">➕ Добавить вещи</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== КАТАЛОГ ==================== -->
+        <div class="page" id="catalogPage">
             <div class="card">
-                <h2>🛒 Где купить материалы</h2>
-                <p style="color:var(--text-light);">Нажмите на карточку, чтобы перейти к покупке.</p>
-                <div class="marketplace-grid">
-                    <a href="https://www.wildberries.ru/catalog/0/search.aspx?search=канцтовары%20учебники" target="_blank" class="marketplace-card" rel="noopener">
-                        <div class="marketplace-icon">🟣</div>
-                        <strong>Wildberries</strong>
-                        <p style="font-size:12px; color:var(--text-light);">Канцтовары, бумага</p>
-                    </a>
-                    <a href="https://www.ozon.ru/search/?text=учебники+канцтовары" target="_blank" class="marketplace-card" rel="noopener">
-                        <div class="marketplace-icon">🔵</div>
-                        <strong>Ozon</strong>
-                        <p style="font-size:12px; color:var(--text-light);">Книги, методички</p>
-                    </a>
-                    <a href="https://www.chitai-gorod.ru/search?phrase=учебная%20литература" target="_blank" class="marketplace-card" rel="noopener">
-                        <div class="marketplace-icon">📚</div>
-                        <strong>Читай-город</strong>
-                        <p style="font-size:12px; color:var(--text-light);">Учебная литература</p>
-                    </a>
-                    <a href="https://market.yandex.ru/search?text=канцтовары%20для%20учёбы" target="_blank" class="marketplace-card" rel="noopener">
-                        <div class="marketplace-icon">🛍️</div>
-                        <strong>Яндекс.Маркет</strong>
-                        <p style="font-size:12px; color:var(--text-light);">Всё для учёбы</p>
-                    </a>
+                <div class="catalog-header">
+                    <h2 style="margin:0;">👗 Мой гардероб</h2>
+                    <button class="btn btn-primary" onclick="App.openAddModal()" style="width:auto;">+ Добавить вещь</button>
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Всё</button>
+                    <button class="filter-btn" data-filter="top">👕 Верх</button>
+                    <button class="filter-btn" data-filter="bottom">👖 Низ</button>
+                    <button class="filter-btn" data-filter="shoes">👟 Обувь</button>
+                    <button class="filter-btn" data-filter="outerwear">🧥 Верхняя</button>
+                    <button class="filter-btn" data-filter="accessories">👜 Аксессуары</button>
+                </div>
+                <div class="wardrobe-grid" id="wardrobeGrid"></div>
+                <div class="empty-state" id="emptyState" style="display:none;">
+                    <div class="empty-icon">👗</div>
+                    <h3>Гардероб пуст</h3>
+                    <p>Добавь первую вещь, чтобы начать подбирать луки</p>
+                    <button class="btn btn-primary" onclick="App.openAddModal()" style="width:auto;">+ Добавить вещь</button>
+                </div>
+                <div class="data-actions">
+                    <button class="btn btn-outline" onclick="App.exportWardrobe()" style="width:auto;">📥 Экспорт</button>
+                    <button class="btn btn-outline" onclick="document.getElementById('importFile').click()" style="width:auto;">📤 Импорт</button>
+                    <input type="file" id="importFile" accept=".json" hidden onchange="App.importWardrobe(this)">
                 </div>
             </div>
         </div>
@@ -310,39 +358,29 @@
         <div class="page" id="donatePage">
             <div class="card">
                 <h2>❤️ Поддержать проект</h2>
-                <p style="color:var(--text-light);">Отсканируйте QR-код через банковское приложение (Сбер, Тинькофф, Альфа...)</p>
-                
+                <p style="color:var(--text-light);">Отсканируйте QR-код через банковское приложение</p>
                 <div class="donate-container">
                     <div class="donate-qr">
-                        <h3>QR-код для СБП</h3>
-                        <img id="qrCodeImage" src="" alt="QR-код СБП" style="width:200px; height:200px; background:#eee; border-radius:8px;">
-                        <p style="font-size:12px; color:var(--text-light); margin-top:8px;">Через Систему быстрых платежей</p>
+                        <h3>QR-код СБП</h3>
+                        <img id="qrCodeImage" src="" alt="QR-код" style="width:200px; height:200px; background:#eee; border-radius:8px;">
                     </div>
-                    
                     <div class="donate-info">
                         <div class="highlight">
                             <strong>💳 Как оплатить:</strong>
                             <ol style="margin-top:8px; padding-left:20px;">
                                 <li>Откройте банковское приложение</li>
-                                <li>Найдите «Оплата по QR-коду» или «СБП»</li>
+                                <li>Найдите «Оплата по QR-коду»</li>
                                 <li>Наведите камеру на код</li>
                                 <li>Подтвердите платёж</li>
                             </ol>
                         </div>
-                        
-                        <p style="margin-top:16px;"><strong>Выберите сумму:</strong></p>
                         <div class="donate-amounts">
                             <span class="donate-amount selected" data-amount="100">100 ₽</span>
                             <span class="donate-amount" data-amount="300">300 ₽</span>
                             <span class="donate-amount" data-amount="500">500 ₽</span>
                             <span class="donate-amount" data-amount="1000">1000 ₽</span>
                         </div>
-                        <input type="number" id="customAmount" placeholder="Своя сумма" style="width:100%; padding:12px; margin-top:8px; border:2px solid var(--border); border-radius:10px; font-size:16px;">
-                        
-                        <button class="btn btn-primary" onclick="App.openSBP()" style="margin-top:12px;">
-                            💳 Оплатить через СБП
-                        </button>
-                        <p style="font-size:12px; color:var(--text-light); margin-top:8px;">Комиссия 0.4-0.7%</p>
+                        <button class="btn btn-primary" onclick="App.openSBP()" style="margin-top:12px;">💳 Оплатить через СБП</button>
                     </div>
                 </div>
             </div>
@@ -374,19 +412,64 @@
         </div>
     </div>
 
+    <!-- Модальное окно добавления вещи -->
+    <div class="modal hidden" id="addModal">
+        <div class="modal-overlay" onclick="App.closeAddModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="App.closeAddModal()">&times;</button>
+            <h2>Добавить вещь</h2>
+            <form id="addItemForm" onsubmit="return false;">
+                <div class="form-group"><label>Название</label><input type="text" id="itemName" placeholder="Белая рубашка" required></div>
+                <div class="form-group">
+                    <label>Фото</label>
+                    <div class="photo-upload">
+                        <input type="file" id="itemPhoto" accept="image/*" onchange="App.previewPhoto(this)">
+                        <div class="photo-preview" id="photoPreview" onclick="document.getElementById('itemPhoto').click()">
+                            <span>Нажми, чтобы выбрать фото</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Категория</label>
+                    <select id="itemCategory" required>
+                        <option value="">Выбери...</option>
+                        <option value="top">Верх</option>
+                        <option value="bottom">Низ</option>
+                        <option value="shoes">Обувь</option>
+                        <option value="outerwear">Верхняя одежда</option>
+                        <option value="accessories">Аксессуары</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Сезон</label>
+                    <select id="itemSeason" required>
+                        <option value="">Выбери...</option>
+                        <option value="winter">Зима</option>
+                        <option value="demi">Демисезон</option>
+                        <option value="summer">Лето</option>
+                        <option value="rain">Дождь</option>
+                        <option value="all">Всесезонное</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Стиль</label>
+                    <select id="itemStyle" required>
+                        <option value="">Выбери...</option>
+                        <option value="office">Офисный</option>
+                        <option value="casual">Повседневный</option>
+                        <option value="sport">Спортивный</option>
+                        <option value="party">Вечерний</option>
+                        <option value="date">Романтичный</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="App.addItem()">Добавить в гардероб</button>
+            </form>
+        </div>
+    </div>
+
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-    // ==================== КОНФИГУРАЦИЯ (ТОЛЬКО ТО, ЧТО НУЖНО) ====================
-    const CONFIG = {
-        // Ссылка СБП (получить в банковском приложении: Платежи → СБП → QR-код → Поделиться)
-        SBP_LINK: 'https://c2c.cbrpay.ru/AS1I0054D6206P0386PRNCKTFB9C3A90',
-        
-        // GitHub (опционально — для синхронизации между устройствами)
-        GITHUB_USER: '', // ← вставь свой GitHub username
-        GITHUB_REPO: '', // ← вставь название репозитория
-    };
-
     // ==================== ХЕШИРОВАНИЕ ====================
     async function sha256(msg) {
         const buf = new TextEncoder().encode(msg);
@@ -394,23 +477,47 @@
         return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
+    // ==================== SVG-ЗАГЛУШКИ ====================
+    function makeDemoPhoto(emoji, bg, label, textColor) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+            <rect width="200" height="200" fill="${bg}"/>
+            <text x="100" y="95" text-anchor="middle" font-size="52">${emoji}</text>
+            <text x="100" y="155" text-anchor="middle" font-size="13" fill="${textColor}" font-family="sans-serif">${label}</text>
+        </svg>`;
+        return 'data:image/svg+xml,' + encodeURIComponent(svg);
+    }
+
     // ==================== ПРИЛОЖЕНИЕ ====================
     const App = (() => {
         const DEFAULT_USERS = [
             { login: 'admin', passwordHash: '', name: 'Администратор', role: 'admin' },
-            { login: 'user1', passwordHash: '', name: 'Студент Юмашев', role: 'student' },
-            { login: 'user2', passwordHash: '', name: 'Студент Уточкин', role: 'student' },
+            { login: 'user1', passwordHash: '', name: 'Анна', role: 'user' },
+            { login: 'user2', passwordHash: '', name: 'Максим', role: 'user' },
         ];
-        const DEFAULT_ITEMS = [
-            'Титульный лист', 'Содержание', 'Введение',
-            'Основная часть (2-3 главы)', 'Заключение', 'Список источников',
+
+        const DEMO_ITEMS = [
+            { id: 1001, name: 'Белая рубашка', photo: makeDemoPhoto('👔', '#f5f5f0', 'Рубашка', '#333'), category: 'top', season: 'all', style: 'office', color: '#FFFFFF' },
+            { id: 1002, name: 'Чёрные брюки', photo: makeDemoPhoto('👖', '#1a1a2e', 'Брюки', '#ccc'), category: 'bottom', season: 'all', style: 'office', color: '#000000' },
+            { id: 1003, name: 'Кеды', photo: makeDemoPhoto('👟', '#e8f4f8', 'Кеды', '#333'), category: 'shoes', season: 'summer', style: 'casual', color: '#E8F4F8' },
+            { id: 1004, name: 'Джинсы', photo: makeDemoPhoto('👖', '#4a6fa5', 'Джинсы', '#fff'), category: 'bottom', season: 'demi', style: 'casual', color: '#4A6FA5' },
+            { id: 1005, name: 'Туфли', photo: makeDemoPhoto('👞', '#2d2d2d', 'Туфли', '#ccc'), category: 'shoes', season: 'all', style: 'office', color: '#2D2D2D' },
+            { id: 1006, name: 'Свитер', photo: makeDemoPhoto('🧶', '#c0392b', 'Свитер', '#fff'), category: 'top', season: 'winter', style: 'casual', color: '#C0392B' },
+            { id: 1007, name: 'Пальто', photo: makeDemoPhoto('🧥', '#5d4037', 'Пальто', '#ccc'), category: 'outerwear', season: 'winter', style: 'office', color: '#5D4037' },
+            { id: 1008, name: 'Шорты', photo: makeDemoPhoto('🩳', '#27ae60', 'Шорты', '#fff'), category: 'bottom', season: 'summer', style: 'sport', color: '#27AE60' },
+            { id: 1009, name: 'Кроссовки', photo: makeDemoPhoto('👟', '#f39c12', 'Кроссовки', '#fff'), category: 'shoes', season: 'all', style: 'sport', color: '#F39C12' },
+            { id: 1010, name: 'Сумка', photo: makeDemoPhoto('👜', '#e8daef', 'Сумка', '#333'), category: 'accessories', season: 'all', style: 'casual', color: '#E8DAEF' },
         ];
+
         const MAX_LOGIN_ATTEMPTS = 5;
         const BLOCK_DURATION = 5 * 60 * 1000;
+        const SBP_LINK = 'https://qr.nspk.ru/AS100068ZRHKMOBITSJCKH7LPCD0L0SM?type=01&bank=100000000111';
 
         let currentUser = null;
-        let checklistItems = [];
+        let wardrobe = [];
         let loginAttempts = {};
+        let currentFilter = 'all';
+        let lastOccasion = null;
+        let lastWeather = null;
         let selectedAmount = 100;
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
@@ -429,28 +536,36 @@
             }
             if (updated) saveAllUsers(users);
 
-            generateQRCode();
-            setupDonateButtons();
             setupNavTabs();
+            setupFilters();
+            setupDonateButtons();
             checkSession();
-            setupEnterKey();
+            document.getElementById('passwordInput').addEventListener('keypress', e => { if (e.key === 'Enter') login(); });
         }
 
-        function generateQRCode() {
-            const link = CONFIG.SBP_LINK;
-            const img = document.getElementById('qrCodeImage');
-            if (link && !link.includes('ЗАМЕНИТЬ')) {
-                img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}&margin=10`;
-            } else {
-                img.src = 'data:image/svg+xml,' + encodeURIComponent(
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">' +
-                    '<rect width="200" height="200" fill="#eee"/>' +
-                    '<text x="100" y="85" text-anchor="middle" font-size="13" fill="#999">Замените</text>' +
-                    '<text x="100" y="105" text-anchor="middle" font-size="13" fill="#999">SBP_LINK</text>' +
-                    '<text x="100" y="125" text-anchor="middle" font-size="13" fill="#999">в CONFIG</text>' +
-                    '</svg>'
-                );
-            }
+        function setupNavTabs() {
+            document.getElementById('navTabs').addEventListener('click', e => {
+                if (e.target.classList.contains('nav-tab')) {
+                    const page = e.target.dataset.page;
+                    updateNavTabs(page);
+                    if (page === 'survey') showPage('surveyPage');
+                    if (page === 'catalog') { showPage('catalogPage'); renderCatalog(); }
+                    if (page === 'donate') showPage('donatePage');
+                    if (page === 'profile') showProfile();
+                    if (page === 'admin') showAdmin();
+                }
+            });
+        }
+
+        function setupFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderCatalog();
+                });
+            });
         }
 
         function setupDonateButtons() {
@@ -459,34 +574,15 @@
                     document.querySelectorAll('.donate-amount').forEach(e => e.classList.remove('selected'));
                     this.classList.add('selected');
                     selectedAmount = parseInt(this.dataset.amount);
-                    document.getElementById('customAmount').value = '';
                 });
             });
-            document.getElementById('customAmount').addEventListener('input', function() {
-                if (this.value) {
-                    document.querySelectorAll('.donate-amount').forEach(e => e.classList.remove('selected'));
-                    selectedAmount = parseInt(this.value) || 100;
-                }
-            });
-        }
 
-        function setupNavTabs() {
-            document.getElementById('navTabs').addEventListener('click', (e) => {
-                if (e.target.classList.contains('nav-tab')) {
-                    const page = e.target.dataset.page;
-                    updateNavTabs(page);
-                    showPage(page + 'Page');
-                    if (page === 'checklist') renderAll();
-                    if (page === 'profile') showProfile();
-                    if (page === 'admin') showAdmin();
-                }
-            });
-        }
-
-        function setupEnterKey() {
-            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') login();
-            });
+            const img = document.getElementById('qrCodeImage');
+            if (SBP_LINK && !SBP_LINK.includes('ЗАМЕНИТЬ')) {
+                img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(SBP_LINK)}&margin=10`;
+            } else {
+                img.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#eee"/><text x="100" y="100" text-anchor="middle" font-size="14" fill="#999">Настройте SBP_LINK</text></svg>');
+            }
         }
 
         // ==================== ДАННЫЕ ====================
@@ -496,6 +592,21 @@
             return JSON.parse(JSON.stringify(DEFAULT_USERS));
         }
         function saveAllUsers(users) { localStorage.setItem('app_users', JSON.stringify(users)); }
+
+        function getWardrobe() {
+            if (!currentUser) return [];
+            const saved = localStorage.getItem(`wardrobe_${currentUser.login}`);
+            if (saved) { try { return JSON.parse(saved); } catch(e){} }
+            // Первый вход — загружаем демо
+            const demo = JSON.parse(JSON.stringify(DEMO_ITEMS));
+            saveWardrobe(demo);
+            return demo;
+        }
+        function saveWardrobe(items) {
+            if (!currentUser) return;
+            wardrobe = items || wardrobe;
+            localStorage.setItem(`wardrobe_${currentUser.login}`, JSON.stringify(wardrobe));
+        }
 
         function checkSession() {
             const saved = localStorage.getItem('app_session');
@@ -513,22 +624,20 @@
         }
 
         function showPage(pageId) {
-            ['loginPage','registerPage','resetPage','checklistPage','shopPage','donatePage','profilePage','adminPage']
-                .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
+            const allPages = ['loginPage','registerPage','resetPage','surveyPage','resultPage','catalogPage','donatePage','profilePage','adminPage'];
+            allPages.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
             const page = document.getElementById(pageId);
             if (page) page.classList.add('active');
-
-            const mainPages = ['checklistPage','shopPage','donatePage','profilePage','adminPage'];
+            const mainPages = ['surveyPage','resultPage','catalogPage','donatePage','profilePage','adminPage'];
             document.getElementById('navTabs').style.display = mainPages.includes(pageId) ? 'flex' : 'none';
         }
 
         function showMainUI() {
-            showPage('checklistPage');
+            wardrobe = getWardrobe();
+            showPage('surveyPage');
             document.getElementById('navTabs').style.display = 'flex';
             document.getElementById('adminTab').style.display = currentUser.role === 'admin' ? 'block' : 'none';
-            loadChecklist();
-            renderAll();
-            updateNavTabs('checklist');
+            updateNavTabs('survey');
         }
 
         function updateNavTabs(active) {
@@ -552,7 +661,6 @@
                 return;
             }
             blockedEl.style.display = 'none';
-
             if (!loginVal || !password) { errorEl.textContent = 'Заполните все поля'; return; }
 
             const users = getAllUsers();
@@ -563,20 +671,13 @@
                 loginAttempts[loginVal] = { count: 0, blockedUntil: 0 };
                 localStorage.setItem('login_attempts', JSON.stringify(loginAttempts));
                 currentUser = user;
-                localStorage.setItem('app_session', JSON.stringify({
-                    login: user.login,
-                    expires: Date.now() + 30*24*60*60*1000,
-                }));
+                localStorage.setItem('app_session', JSON.stringify({ login: user.login, expires: Date.now() + 30*24*60*60*1000 }));
                 errorEl.textContent = '';
                 showMainUI();
                 toast('👋 Добро пожаловать, ' + user.name + '!', 'success');
             } else {
                 attempt.count = (attempt.count || 0) + 1;
-                if (attempt.count >= MAX_LOGIN_ATTEMPTS) {
-                    attempt.blockedUntil = Date.now() + BLOCK_DURATION;
-                    blockedEl.style.display = 'block';
-                    blockedEl.textContent = '⚠️ Вход заблокирован на 5 минут.';
-                }
+                if (attempt.count >= MAX_LOGIN_ATTEMPTS) { attempt.blockedUntil = Date.now() + BLOCK_DURATION; blockedEl.style.display = 'block'; }
                 loginAttempts[loginVal] = attempt;
                 localStorage.setItem('login_attempts', JSON.stringify(loginAttempts));
                 errorEl.textContent = 'Неверный логин или пароль';
@@ -599,24 +700,20 @@
             const users = getAllUsers();
             if (users.find(u => u.login === loginVal)) { errorEl.textContent = 'Логин занят'; return; }
 
-            const newUser = { login: loginVal, passwordHash: await sha256(password), name, role: 'student' };
+            const newUser = { login: loginVal, passwordHash: await sha256(password), name, role: 'user' };
             users.push(newUser);
             saveAllUsers(users);
-
-            successEl.textContent = '✅ Аккаунт создан! Перенаправляем...';
+            successEl.textContent = '✅ Аккаунт создан! Заходим...';
             setTimeout(() => {
                 currentUser = newUser;
-                localStorage.setItem('app_session', JSON.stringify({
-                    login: newUser.login,
-                    expires: Date.now() + 30*24*60*60*1000,
-                }));
+                localStorage.setItem('app_session', JSON.stringify({ login: newUser.login, expires: Date.now() + 30*24*60*60*1000 }));
                 showMainUI();
             }, 1500);
         }
 
         function logout() {
             currentUser = null;
-            checklistItems = [];
+            wardrobe = [];
             localStorage.removeItem('app_session');
             showPage('loginPage');
             document.getElementById('loginInput').value = '';
@@ -629,26 +726,16 @@
         function sendResetCode() {
             const loginVal = document.getElementById('resetLogin').value.trim();
             const errorEl = document.getElementById('resetError');
-            errorEl.textContent = '';
-            document.getElementById('resetSuccess').textContent = '';
-
+            errorEl.textContent = ''; document.getElementById('resetSuccess').textContent = '';
             if (!loginVal) { errorEl.textContent = 'Введите логин'; return; }
-
             const users = getAllUsers();
             const user = users.find(u => u.login === loginVal);
             if (!user) { errorEl.textContent = 'Пользователь не найден'; return; }
-
-            // Генерируем код и показываем на экране (демо-режим)
             const code = Math.floor(100000 + Math.random() * 900000).toString();
-            localStorage.setItem('reset_code_' + loginVal, JSON.stringify({
-                code, expires: Date.now() + 600000,
-            }));
-
+            localStorage.setItem('reset_code_' + loginVal, JSON.stringify({ code, expires: Date.now() + 600000 }));
             document.getElementById('resetCodeDisplay').textContent = code;
             document.getElementById('resetCodeSection').style.display = 'block';
-            document.getElementById('resetError').textContent = '';
-            
-            toast('🔑 Код восстановления показан на экране', 'info');
+            toast('🔑 Код на экране', 'info');
         }
 
         async function resetPassword() {
@@ -658,34 +745,19 @@
             const errorEl = document.getElementById('resetError');
             const successEl = document.getElementById('resetSuccess');
             errorEl.textContent = ''; successEl.textContent = '';
-
             const saved = localStorage.getItem('reset_code_' + loginVal);
-            if (!saved) { errorEl.textContent = 'Сначала получите код'; return; }
-
+            if (!saved) { errorEl.textContent = 'Получите код'; return; }
             const data = JSON.parse(saved);
-            if (data.expires < Date.now()) { errorEl.textContent = 'Код истёк. Получите новый.'; return; }
+            if (data.expires < Date.now()) { errorEl.textContent = 'Код истёк'; return; }
             if (data.code !== code) { errorEl.textContent = 'Неверный код'; return; }
-            if (newPassword.length < 4) { errorEl.textContent = 'Пароль: минимум 4 символа'; return; }
-
+            if (newPassword.length < 4) { errorEl.textContent = 'Минимум 4 символа'; return; }
             const users = getAllUsers();
             const user = users.find(u => u.login === loginVal);
-            if (!user) { errorEl.textContent = 'Пользователь не найден'; return; }
-
             user.passwordHash = await sha256(newPassword);
             saveAllUsers(users);
             localStorage.removeItem('reset_code_' + loginVal);
-
-            successEl.textContent = '✅ Пароль изменён! Сейчас войдём...';
-            document.getElementById('resetCodeSection').style.display = 'none';
-
-            setTimeout(() => {
-                currentUser = user;
-                localStorage.setItem('app_session', JSON.stringify({
-                    login: user.login,
-                    expires: Date.now() + 30*24*60*60*1000,
-                }));
-                showMainUI();
-            }, 1500);
+            successEl.textContent = '✅ Пароль изменён!';
+            setTimeout(() => { currentUser = user; localStorage.setItem('app_session', JSON.stringify({ login: user.login, expires: Date.now() + 30*24*60*60*1000 })); showMainUI(); }, 1500);
         }
 
         // ==================== ПРОФИЛЬ ====================
@@ -693,19 +765,16 @@
             showPage('profilePage');
             document.getElementById('profileName').value = currentUser.name;
             document.getElementById('profileLogin').value = currentUser.login;
-            document.getElementById('profileRole').value = currentUser.role;
+            document.getElementById('profileRole').value = currentUser.role === 'admin' ? 'Администратор' : 'Пользователь';
         }
-
         function updateProfile() {
             const name = document.getElementById('profileName').value.trim();
             if (!name) { toast('Введите имя', 'error'); return; }
-
             const users = getAllUsers();
-            const user = users.find(u => u.login === currentUser.login);
-            if (user) user.name = name;
+            users.find(u => u.login === currentUser.login).name = name;
             saveAllUsers(users);
             currentUser.name = name;
-            document.getElementById('profileSuccess').textContent = '✅ Изменения сохранены!';
+            document.getElementById('profileSuccess').textContent = '✅ Сохранено!';
             setTimeout(() => document.getElementById('profileSuccess').textContent = '', 2500);
             toast('💾 Профиль обновлён', 'success');
         }
@@ -716,206 +785,202 @@
             const users = getAllUsers();
             document.getElementById('usersTableBody').innerHTML = users.map(u => `
                 <tr>
-                    <td>${u.login}</td>
-                    <td>${u.name}</td>
-                    <td><span style="background:#e8f5e9; color:#2e7d32; padding:2px 10px; border-radius:12px; font-size:12px;">${u.role}</span></td>
+                    <td>${u.login}</td><td>${u.name}</td>
+                    <td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:12px;font-size:12px;">${u.role}</span></td>
                     <td>
-                        <button class="btn btn-warning btn-sm" onclick="App.changeRole('${u.login}')">Сменить роль</button>
+                        <button class="btn btn-warning btn-sm" onclick="App.changeRole('${u.login}')">Роль</button>
                         <button class="btn btn-danger btn-sm" onclick="App.deleteUser('${u.login}')">Удалить</button>
                     </td>
                 </tr>
             `).join('');
         }
-
         function changeRole(login) {
-            const roles = ['student', 'teacher', 'admin'];
-            const user = getAllUsers().find(u => u.login === login);
-            const idx = roles.indexOf(user.role);
-            const newRole = roles[(idx + 1) % roles.length];
-            if (confirm(`Сменить роль ${login} на ${newRole}?`)) {
-                const users = getAllUsers();
-                users.find(u => u.login === login).role = newRole;
-                saveAllUsers(users);
-                showAdmin();
-                toast('✅ Роль обновлена', 'success');
-            }
+            const roles = ['user', 'admin'];
+            const users = getAllUsers();
+            const user = users.find(u => u.login === login);
+            user.role = roles[(roles.indexOf(user.role) + 1) % 2];
+            saveAllUsers(users);
+            showAdmin();
+            toast('✅ Роль изменена', 'success');
         }
-
         function deleteUser(login) {
             if (login === 'admin') { toast('Нельзя удалить админа', 'error'); return; }
-            if (confirm(`Удалить пользователя ${login}?`)) {
-                let users = getAllUsers();
-                users = users.filter(u => u.login !== login);
+            if (confirm(`Удалить ${login}?`)) {
+                let users = getAllUsers().filter(u => u.login !== login);
                 saveAllUsers(users);
                 showAdmin();
-                toast('🗑 Пользователь удалён', 'info');
+                toast('🗑 Удалён', 'info');
             }
         }
 
-        // ==================== ЧЕКЛИСТ ====================
-        function loadChecklist() {
-            const key = `checklist_${currentUser.login}`;
-            const saved = localStorage.getItem(key);
-            if (saved) { try { checklistItems = JSON.parse(saved); return; } catch(e){} }
-            checklistItems = DEFAULT_ITEMS.map((t, i) => ({ id: Date.now()+i, text:t, completed:false, order:i }));
-            saveChecklist();
+        // ==================== ПОДБОР ЛУКА ====================
+        function getOutfit() {
+            const occasionEl = document.querySelector('input[name="occasion"]:checked');
+            const weatherEl = document.querySelector('input[name="weather"]:checked');
+            if (!occasionEl || !weatherEl) { toast('Выбери повод и погоду!', 'error'); return; }
+
+            lastOccasion = occasionEl.value;
+            lastWeather = weatherEl.value;
+            const w = getWardrobe();
+
+            let tops = w.filter(i => i.category === 'top' && (i.season === lastWeather || i.season === 'all') && (i.style === lastOccasion || i.style === 'casual'));
+            let bottoms = w.filter(i => i.category === 'bottom' && (i.season === lastWeather || i.season === 'all') && (i.style === lastOccasion || i.style === 'casual'));
+            let shoes = w.filter(i => i.category === 'shoes' && (i.season === lastWeather || i.season === 'all'));
+            let outerwear = w.filter(i => i.category === 'outerwear' && (i.season === lastWeather || i.season === 'all'));
+
+            if (tops.length === 0) tops = w.filter(i => i.category === 'top');
+            if (bottoms.length === 0) bottoms = w.filter(i => i.category === 'bottom');
+            if (shoes.length === 0) shoes = w.filter(i => i.category === 'shoes');
+
+            const result = {};
+            if (outerwear.length > 0 && lastWeather !== 'summer') result.outerwear = outerwear[Math.floor(Math.random() * outerwear.length)];
+            if (tops.length > 0) result.top = tops[Math.floor(Math.random() * tops.length)];
+            if (bottoms.length > 0) result.bottom = bottoms[Math.floor(Math.random() * bottoms.length)];
+            if (shoes.length > 0) result.shoes = shoes[Math.floor(Math.random() * shoes.length)];
+
+            const occasionNames = { office: 'офис', casual: 'прогулку', sport: 'спорт', party: 'вечеринку', date: 'свидание' };
+            const weatherNames = { winter: 'холодную', demi: 'прохладную', summer: 'тёплую', rain: 'дождливую' };
+            document.getElementById('resultDescription').textContent = `На ${occasionNames[lastOccasion]} в ${weatherNames[lastWeather]} погоду:`;
+
+            const container = document.getElementById('outfitContainer');
+            const warning = document.getElementById('emptyWarning');
+
+            if (Object.keys(result).length === 0) {
+                container.innerHTML = '';
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+                const order = ['outerwear', 'top', 'bottom', 'shoes', 'accessories'];
+                const names = { outerwear: 'Верхняя одежда', top: 'Верх', bottom: 'Низ', shoes: 'Обувь', accessories: 'Аксессуары' };
+                container.innerHTML = order.filter(c => result[c]).map(c => `
+                    <div class="outfit-item">
+                        <img src="${result[c].photo}" alt="${result[c].name}" onerror="this.style.background='#e0e0e0'">
+                        <div class="item-category">${names[c]}</div>
+                        <div class="item-name">${result[c].name}</div>
+                    </div>
+                `).join('');
+            }
+
+            showPage('resultPage');
+            updateNavTabs('survey');
         }
 
-        function saveChecklist() {
-            if (!currentUser) return;
-            localStorage.setItem(`checklist_${currentUser.login}`, JSON.stringify(checklistItems));
+        // ==================== КАТАЛОГ ====================
+        function renderCatalog() {
+            const grid = document.getElementById('wardrobeGrid');
+            const emptyState = document.getElementById('emptyState');
+            const w = getWardrobe();
+            const filtered = currentFilter === 'all' ? w : w.filter(i => i.category === currentFilter);
+
+            if (w.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                const emojiMap = { top: '👕', bottom: '👖', shoes: '👟', outerwear: '🧥', accessories: '👜' };
+                const styleMap = { office: 'Офис', casual: 'Повседн.', sport: 'Спорт', party: 'Вечер', date: 'Романт.' };
+                const seasonMap = { winter: 'Зима', demi: 'Деми', summer: 'Лето', rain: 'Дождь', all: 'Всесезон' };
+                grid.innerHTML = filtered.map(item => `
+                    <div class="wardrobe-item">
+                        <img src="${item.photo}" alt="${item.name}" onerror="this.style.background='#e0e0e0'">
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-meta">${emojiMap[item.category]||'👗'} ${styleMap[item.style]} · ${seasonMap[item.season]}</div>
+                            <button class="btn btn-sm" style="color:var(--danger);background:transparent;margin-top:4px;" onclick="App.deleteWardrobeItem(${item.id})">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
-        function renderAll() {
-            const container = document.getElementById('checklistContainer');
-            if (!container) return;
-            const sorted = [...checklistItems].sort((a,b) => (a.order||0)-(b.order||0));
-            container.innerHTML = sorted.map(item => `
-                <div class="checklist-item">
-                    <input type="checkbox" ${item.completed?'checked':''} onchange="App.toggleComplete(${item.id})">
-                    <span class="item-text ${item.completed?'completed':''}">${escapeHTML(item.text)}</span>
-                    <button class="btn btn-sm" style="background:transparent; color:var(--danger);" onclick="App.deleteItem(${item.id})">✕</button>
-                </div>
-            `).join('');
+        function openAddModal() { document.getElementById('addModal').classList.remove('hidden'); }
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+            document.getElementById('addItemForm').reset();
+            document.getElementById('photoPreview').innerHTML = '<span>Нажми, чтобы выбрать фото</span>';
+        }
 
-            const total = checklistItems.length;
-            const done = checklistItems.filter(i => i.completed).length;
-            const pct = total ? Math.round(done/total*100) : 0;
-            document.getElementById('statsText').textContent = `Выполнено ${done} из ${total} (${pct}%)`;
-            document.getElementById('progressFill').style.width = pct + '%';
+        function previewPhoto(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => { document.getElementById('photoPreview').innerHTML = `<img src="${e.target.result}" alt="Предпросмотр">`; };
+                reader.readAsDataURL(file);
+            }
         }
 
         function addItem() {
-            const input = document.getElementById('newItemInput');
-            const text = input.value.trim();
-            if (!text) { toast('Введите название этапа', 'error'); return; }
-            checklistItems.push({ id:Date.now(), text, completed:false, order:checklistItems.length });
-            saveChecklist(); renderAll();
-            input.value = ''; input.focus();
-            toast('✅ Этап добавлен', 'success');
+            const name = document.getElementById('itemName').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            const season = document.getElementById('itemSeason').value;
+            const style = document.getElementById('itemStyle').value;
+            const photoImg = document.querySelector('#photoPreview img');
+            let photo = '';
+            if (photoImg) { photo = photoImg.src; } else { photo = makeDemoPhoto('👗', '#e0e0e0', name || 'Вещь', '#333'); }
+            if (!name || !category || !season || !style) { toast('Заполни все поля', 'error'); return; }
+            const w = getWardrobe();
+            w.push({ id: Date.now(), name, photo, category, season, style, color: '#cccccc' });
+            saveWardrobe(w);
+            closeAddModal();
+            renderCatalog();
+            toast('✅ Вещь добавлена!', 'success');
         }
 
-        function deleteItem(id) {
-            checklistItems = checklistItems.filter(i => i.id !== id);
-            checklistItems.forEach((item, i) => item.order = i);
-            saveChecklist(); renderAll();
-        }
-
-        function toggleComplete(id) {
-            const item = checklistItems.find(i => i.id === id);
-            if (item) { item.completed = !item.completed; saveChecklist(); renderAll(); }
-        }
-
-        function resetChecklist() {
-            if (confirm('Сбросить чеклист к шаблону?')) {
-                checklistItems = DEFAULT_ITEMS.map((t,i)=>({ id:Date.now()+i, text:t, completed:false, order:i }));
-                saveChecklist(); renderAll();
-                toast('🔄 Чеклист сброшен', 'info');
+        function deleteWardrobeItem(id) {
+            if (confirm('Удалить вещь?')) {
+                const w = getWardrobe().filter(i => i.id !== id);
+                saveWardrobe(w);
+                renderCatalog();
             }
         }
 
-        // ==================== СИНХРОНИЗАЦИЯ ЧЕРЕЗ GITHUB ====================
-        function syncToGitHub() {
-            if (!CONFIG.GITHUB_USER || !CONFIG.GITHUB_REPO) {
-                toast('⚠️ Настройте GITHUB_USER и GITHUB_REPO в CONFIG', 'error');
-                document.getElementById('syncStatus').textContent = '⚠️ Синхронизация не настроена';
-                return;
-            }
+        function exportWardrobe() {
+            const w = getWardrobe();
+            const blob = new Blob([JSON.stringify(w, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `wardrobe_${currentUser.login}.json`;
+            a.click();
+            toast('📥 Гардероб экспортирован', 'success');
+        }
 
-            document.getElementById('syncStatus').textContent = '⏳ Синхронизация...';
-
-            // Сохраняем данные в localStorage с меткой времени
-            const syncData = {
-                login: currentUser.login,
-                items: checklistItems,
-                updatedAt: new Date().toISOString(),
+        function importWardrobe(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) throw new Error('Формат');
+                    const current = getWardrobe();
+                    imported.forEach(item => { if (!current.find(i => i.id === item.id)) current.push(item); });
+                    saveWardrobe(current);
+                    renderCatalog();
+                    toast('📤 Импортировано!', 'success');
+                } catch (err) { toast('❌ Ошибка файла', 'error'); }
             };
-            localStorage.setItem(`sync_${currentUser.login}`, JSON.stringify(syncData));
-
-            // Пытаемся загрузить данные из GitHub Issues
-            loadFromGitHub().then(loaded => {
-                if (loaded) {
-                    document.getElementById('syncStatus').textContent = '✅ Синхронизировано ' + new Date().toLocaleTimeString();
-                    toast('☁️ Данные синхронизированы', 'success');
-                } else {
-                    document.getElementById('syncStatus').textContent = '💾 Сохранено локально (GitHub не настроен)';
-                    toast('💾 Сохранено локально', 'info');
-                }
-            });
-        }
-
-        async function loadFromGitHub() {
-            if (!CONFIG.GITHUB_USER || !CONFIG.GITHUB_REPO) return false;
-
-            try {
-                // Ищем Issue с меткой пользователя
-                const url = `https://api.github.com/repos/${CONFIG.GITHUB_USER}/${CONFIG.GITHUB_REPO}/issues?labels=sync,${currentUser.login}&state=open&per_page=1`;
-                const response = await fetch(url);
-
-                if (response.ok) {
-                    const issues = await response.json();
-                    if (issues.length > 0) {
-                        const body = issues[0].body;
-                        const data = JSON.parse(body);
-                        
-                        // Сравниваем даты
-                        const localData = localStorage.getItem(`sync_${currentUser.login}`);
-                        const local = localData ? JSON.parse(localData) : null;
-
-                        if (!local || data.updatedAt > local.updatedAt) {
-                            checklistItems = data.items;
-                            saveChecklist();
-                            renderAll();
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            } catch (e) {
-                console.log('GitHub API недоступен (работаем офлайн)');
-                return false;
-            }
+            reader.readAsText(file);
+            input.value = '';
         }
 
         // ==================== СБП ====================
         function openSBP() {
-            const customAmount = document.getElementById('customAmount').value;
-            const amount = customAmount ? parseInt(customAmount) : selectedAmount;
-            
-            if (!amount || amount < 10) {
-                toast('Введите сумму (минимум 10 ₽)', 'error');
-                return;
-            }
-
-            const link = CONFIG.SBP_LINK;
-            if (link && !link.includes('ЗАМЕНИТЬ')) {
-                window.open(link, '_blank');
-                toast(`💳 Открыта оплата на ${amount} ₽`, 'info');
-            } else {
-                toast('⚠️ Настройте SBP_LINK в CONFIG', 'error');
-            }
+            if (SBP_LINK && !SBP_LINK.includes('ЗАМЕНИТЬ')) {
+                window.open(SBP_LINK, '_blank');
+                toast(`💳 Оплата ${selectedAmount} ₽`, 'info');
+            } else { toast('⚠️ Настройте SBP_LINK', 'error'); }
         }
 
         // ==================== УТИЛИТЫ ====================
-        function escapeHTML(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
         function toast(msg, type='info') {
-            const container = document.getElementById('toastContainer');
             const t = document.createElement('div');
             t.className = `toast ${type}`;
             t.textContent = msg;
-            container.appendChild(t);
+            document.getElementById('toastContainer').appendChild(t);
             setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
         }
 
-        return {
-            init, showPage, login, register, logout,
-            sendResetCode, resetPassword,
-            showProfile, updateProfile,
-            showAdmin, changeRole, deleteUser,
-            addItem, deleteItem, toggleComplete, resetChecklist,
-            syncToGitHub, openSBP,
-        };
+        return { init, showPage, login, register, logout, sendResetCode, resetPassword, showProfile, updateProfile, showAdmin, changeRole, deleteUser, getOutfit, openAddModal, closeAddModal, previewPhoto, addItem, deleteWardrobeItem, exportWardrobe, importWardrobe, openSBP, renderCatalog };
     })();
 
     document.addEventListener('DOMContentLoaded', () => App.init());
