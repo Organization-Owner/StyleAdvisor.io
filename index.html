@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контроль выполнения работы + Магазин</title>
+    <title>Контроль выполнения работы</title>
     <style>
         :root {
             --primary: #667eea;
@@ -11,21 +11,19 @@
             --success: #28a745;
             --danger: #dc3545;
             --warning: #ffc107;
-            --wb: #a64ca6;
-            --ozon: #005bff;
             --bg: #f8f9fa;
             --card-bg: #ffffff;
-            --text: #333;
-            --text-light: #666;
-            --border: #ddd;
-            --radius: 10px;
-            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+            --text: #1d1d1f;
+            --text-light: #6e6e73;
+            --border: #e5e5ea;
+            --radius: 14px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -34,324 +32,392 @@
             padding: 20px;
         }
 
-        /* Навигация */
+        .app-wrapper { width: 100%; max-width: 900px; }
+
         .nav-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
+            background: rgba(255,255,255,0.15); padding: 6px; border-radius: 20px;
         }
         .nav-tab {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
+            padding: 10px 18px; border: none; border-radius: 16px;
+            background: transparent; color: white; cursor: pointer;
+            font-weight: 500; font-size: 14px; transition: all 0.2s;
         }
-        .nav-tab.active { background: white; color: var(--primary); }
-        .nav-tab:hover { background: rgba(255,255,255,0.3); }
+        .nav-tab.active { background: white; color: var(--primary); font-weight: 600; }
+        .nav-tab:hover:not(.active) { background: rgba(255,255,255,0.2); }
 
-        /* Страницы */
-        .page { display: none; width: 100%; }
+        .page { display: none; width: 100%; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Карточка */
         .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            animation: fadeIn 0.3s ease;
+            background: var(--card-bg); border-radius: var(--radius);
+            padding: 32px; box-shadow: var(--shadow); width: 100%; margin: 0 auto;
         }
+        .card h2 { margin-bottom: 24px; color: var(--text); font-size: 24px; }
+        .card h3 { margin-bottom: 16px; color: var(--text); }
+        .card p { color: var(--text-light); margin-bottom: 12px; line-height: 1.5; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .card h2 { margin-bottom: 24px; color: var(--text); }
-
-        /* Формы */
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.2s;
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text); }
+        .form-group input, .form-group select {
+            width: 100%; padding: 14px 16px; border: 2px solid var(--border);
+            border-radius: 10px; font-size: 16px; transition: all 0.2s; background: var(--bg);
         }
-        .form-group input:focus { outline: none; border-color: var(--primary); }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: var(--primary); background: white;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+        }
+        .form-group input:disabled { background: #eee; color: #999; cursor: not-allowed; }
 
         .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
+            padding: 14px 24px; border: none; border-radius: 10px;
+            font-size: 16px; cursor: pointer; font-weight: 600;
+            transition: all 0.2s; display: inline-flex; align-items: center;
+            justify-content: center; gap: 8px;
         }
         .btn-primary { background: var(--primary); color: white; width: 100%; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-success { background: var(--success); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-warning { background: var(--warning); color: #333; }
         .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+            background: transparent; border: 2px solid var(--primary);
+            color: var(--primary); width: 100%; margin-top: 8px;
         }
+        .btn-outline:hover { background: #f0eeff; }
+        .btn-sm { padding: 8px 16px; font-size: 14px; border-radius: 8px; }
 
-        .message { text-align: center; margin-top: 12px; min-height: 20px; font-size: 14px; }
+        .message { text-align: center; margin-top: 14px; min-height: 20px; font-size: 14px; }
         .message.error { color: var(--danger); }
         .message.success { color: var(--success); }
-
-        /* Маркетплейсы */
-        .marketplace-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .marketplace-card {
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            text-align: center;
-            transition: all 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text);
-        }
-        .marketplace-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-        .marketplace-card.wb:hover { border-color: var(--wb); }
-        .marketplace-card.ozon:hover { border-color: var(--ozon); }
-        .marketplace-icon { font-size: 48px; margin-bottom: 12px; }
+        .message.info { color: #17a2b8; }
 
         /* Чеклист */
         .checklist-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            margin: 8px 0;
-            background: var(--bg);
-            border-radius: 8px;
-            gap: 10px;
+            display: flex; align-items: center; padding: 14px 16px;
+            margin: 8px 0; background: var(--bg); border-radius: 10px;
+            gap: 12px; transition: all 0.2s; border: 2px solid transparent;
         }
+        .checklist-item:hover { background: #eef; border-color: #dde; }
         .checklist-item input[type="checkbox"] {
-            width: 22px; height: 22px;
-            cursor: pointer; accent-color: var(--primary);
+            width: 22px; height: 22px; cursor: pointer;
+            accent-color: var(--primary); flex-shrink: 0;
         }
-        .item-text { flex: 1; padding: 4px 8px; }
+        .item-text { flex: 1; font-size: 16px; word-break: break-word; }
         .item-text.completed { text-decoration: line-through; color: #999; }
 
         .progress-bar {
-            width: 100%; height: 8px;
-            background: #e0e0e0; border-radius: 4px;
-            margin-top: 12px; overflow: hidden;
+            width: 100%; height: 10px; background: #e0e0e0;
+            border-radius: 5px; margin-top: 12px; overflow: hidden;
         }
         .progress-fill {
-            height: 100%; background: var(--primary);
-            border-radius: 4px; transition: width 0.5s;
+            height: 100%; background: linear-gradient(90deg, var(--primary), #764ba2);
+            border-radius: 5px; transition: width 0.5s ease;
         }
 
+        /* Код восстановления */
+        .code-display {
+            background: #1a1a2e; color: #0f0; padding: 24px;
+            border-radius: 10px; text-align: center; font-size: 36px;
+            font-family: 'Courier New', monospace; letter-spacing: 8px;
+            margin: 16px 0;
+        }
+
+        /* Маркетплейсы */
+        .marketplace-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px; margin-top: 20px;
+        }
+        .marketplace-card {
+            border: 2px solid var(--border); border-radius: var(--radius);
+            padding: 24px 16px; text-align: center; transition: all 0.2s;
+            cursor: pointer; text-decoration: none; color: var(--text);
+        }
+        .marketplace-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+        .marketplace-icon { font-size: 40px; margin-bottom: 10px; }
+
+        /* Поддержать */
+        .donate-container { display: flex; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        .donate-qr {
+            flex: 0 0 260px; text-align: center;
+            background: var(--bg); border-radius: var(--radius); padding: 20px;
+        }
+        .donate-qr img { width: 200px; height: 200px; border-radius: 8px; }
+        .donate-info { flex: 1; min-width: 280px; }
+        .highlight {
+            background: #f0eeff; padding: 16px; border-radius: 10px;
+            margin: 12px 0; border-left: 4px solid var(--primary);
+        }
+        .donate-amounts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .donate-amount {
+            padding: 10px 20px; border: 2px solid var(--border);
+            border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+        }
+        .donate-amount:hover, .donate-amount.selected {
+            border-color: var(--primary); background: #f0eeff;
+        }
+
+        /* Toast */
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; }
         .toast {
-            position: fixed; bottom: 20px; right: 20px;
-            padding: 14px 20px; border-radius: 8px;
-            color: white; font-weight: 500;
-            z-index: 2000; animation: slideIn 0.3s ease;
+            padding: 14px 20px; border-radius: 10px; color: white;
+            font-weight: 500; margin-top: 8px; animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); max-width: 360px;
         }
         .toast.success { background: var(--success); }
         .toast.error { background: var(--danger); }
+        .toast.info { background: #17a2b8; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg); font-weight: 600; font-size: 14px; }
 
         @media (max-width: 600px) {
             .card { padding: 20px; }
-            .marketplace-grid { grid-template-columns: 1fr; }
+            .marketplace-grid { grid-template-columns: repeat(2, 1fr); }
+            .donate-container { flex-direction: column; align-items: center; }
+            .nav-tab { padding: 8px 14px; font-size: 13px; }
+            .code-display { font-size: 24px; letter-spacing: 4px; }
         }
     </style>
 </head>
 <body>
-    <div style="width: 100%; max-width: 900px;">
+    <div class="app-wrapper">
         <!-- Навигация -->
         <div class="nav-tabs" id="navTabs" style="display:none;">
             <button class="nav-tab active" data-page="checklist">📋 Чеклист</button>
             <button class="nav-tab" data-page="shop">🛒 Магазин</button>
+            <button class="nav-tab" data-page="donate">❤️ Поддержать</button>
             <button class="nav-tab" data-page="profile">👤 Профиль</button>
             <button class="nav-tab" data-page="admin" id="adminTab" style="display:none;">⚙️ Админ</button>
         </div>
 
-        <!-- Страница входа -->
+        <!-- ==================== ВХОД ==================== -->
         <div class="page active" id="loginPage">
             <div class="card">
-                <h2>🔐 Вход</h2>
-                <div class="form-group"><label>Логин</label><input type="text" id="loginInput" autocomplete="username"></div>
-                <div class="form-group"><label>Пароль</label><input type="password" id="passwordInput" autocomplete="current-password"></div>
+                <h2>🔐 Вход в систему</h2>
+                <div class="form-group"><label>Логин</label><input type="text" id="loginInput" placeholder="user1"></div>
+                <div class="form-group"><label>Пароль</label><input type="password" id="passwordInput" placeholder="••••"></div>
                 <button class="btn btn-primary" onclick="App.login()">Войти</button>
-                <div style="text-align:center; margin-top:12px;">
-                    <button class="btn btn-outline" onclick="App.showRegister()" style="width:100%;">Создать аккаунт</button>
-                    <button class="btn btn-outline" onclick="App.showResetPassword()" style="width:100%; margin-top:8px;">Забыли пароль?</button>
-                </div>
+                <button class="btn btn-outline" onclick="App.showPage('registerPage')">Создать аккаунт</button>
+                <button class="btn btn-outline" onclick="App.showPage('resetPage')">Забыли пароль?</button>
                 <div class="message error" id="loginError"></div>
-                <div id="loginBlocked" style="display:none; text-align:center; color:var(--danger); margin-top:12px;">
-                    ⚠️ Вход заблокирован на 5 минут из-за множества неверных попыток.
-                </div>
+                <div id="loginBlocked" style="display:none; text-align:center; color:var(--danger); margin-top:12px;"></div>
             </div>
         </div>
 
-        <!-- Страница регистрации -->
+        <!-- ==================== РЕГИСТРАЦИЯ ==================== -->
         <div class="page" id="registerPage">
             <div class="card">
                 <h2>📝 Регистрация</h2>
                 <div class="form-group"><label>Имя</label><input type="text" id="regName" placeholder="Иван Иванов"></div>
-                <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="ivan@example.com"></div>
-                <div class="form-group"><label>Логин (мин. 3 символа)</label><input type="text" id="regLogin"></div>
-                <div class="form-group"><label>Пароль (мин. 4 символа)</label><input type="password" id="regPassword"></div>
+                <div class="form-group"><label>Логин (мин. 3 символа)</label><input type="text" id="regLogin" placeholder="ivan2024"></div>
+                <div class="form-group"><label>Пароль (мин. 4 символа)</label><input type="password" id="regPassword" placeholder="••••"></div>
                 <button class="btn btn-primary" onclick="App.register()">Зарегистрироваться</button>
-                <button class="btn btn-outline" onclick="App.showLogin()" style="width:100%; margin-top:8px;">← Назад ко входу</button>
+                <button class="btn btn-outline" onclick="App.showPage('loginPage')">← Назад ко входу</button>
                 <div class="message error" id="regError"></div>
                 <div class="message success" id="regSuccess"></div>
             </div>
         </div>
 
-        <!-- Страница восстановления пароля -->
+        <!-- ==================== ВОССТАНОВЛЕНИЕ ПАРОЛЯ ==================== -->
         <div class="page" id="resetPage">
             <div class="card">
                 <h2>🔑 Восстановление пароля</h2>
-                <p style="color:var(--text-light); margin-bottom:16px;">Введите email, указанный при регистрации. Мы отправим код подтверждения.</p>
-                <div class="form-group"><label>Email</label><input type="email" id="resetEmail"></div>
-                <button class="btn btn-primary" onclick="App.sendResetCode()" id="sendResetBtn">Отправить код</button>
-                <div class="form-group" id="resetCodeGroup" style="display:none;">
-                    <label>Код из письма</label>
-                    <input type="text" id="resetCode" placeholder="6 цифр" maxlength="6">
-                    <label>Новый пароль</label>
-                    <input type="password" id="resetNewPassword">
+                <p style="color:var(--text-light); margin-bottom:16px;">
+                    Введите ваш логин. Код восстановления появится на экране.
+                    <br><strong>⚠️ Это демо-режим. В реальном проекте код отправляется на email.</strong>
+                </p>
+                <div class="form-group"><label>Логин</label><input type="text" id="resetLogin" placeholder="user1"></div>
+                <button class="btn btn-primary" onclick="App.sendResetCode()">Получить код</button>
+                
+                <div id="resetCodeSection" style="display:none; margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
+                    <p style="text-align:center; font-weight:600;">Ваш код восстановления:</p>
+                    <div class="code-display" id="resetCodeDisplay">------</div>
+                    <p style="text-align:center; font-size:12px; color:var(--text-light);">Код действителен 10 минут</p>
+                    
+                    <div class="form-group" style="margin-top:16px;"><label>Введите код</label><input type="text" id="resetCodeInput" placeholder="6 цифр" maxlength="6"></div>
+                    <div class="form-group"><label>Новый пароль (мин. 4 символа)</label><input type="password" id="resetNewPassword" placeholder="••••"></div>
                     <button class="btn btn-primary" onclick="App.resetPassword()">Сменить пароль</button>
                 </div>
-                <button class="btn btn-outline" onclick="App.showLogin()" style="width:100%; margin-top:8px;">← Назад ко входу</button>
+                
+                <button class="btn btn-outline" onclick="App.showPage('loginPage')">← Назад ко входу</button>
                 <div class="message error" id="resetError"></div>
                 <div class="message success" id="resetSuccess"></div>
             </div>
         </div>
 
-        <!-- Страница чеклиста -->
+        <!-- ==================== ЧЕКЛИСТ ==================== -->
         <div class="page" id="checklistPage">
             <div class="card">
-                <h2>📋 Контроль выполнения работы</h2>
-                <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
-                    <button class="btn btn-warning" onclick="App.resetChecklist()">🔄 Сбросить</button>
-                    <button class="btn btn-success" onclick="App.syncToCloud()">☁️ Синхронизировать</button>
-                    <span style="margin-left:auto; font-size:12px; color:var(--text-light);" id="syncStatus">✅ Готово</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                    <h2 style="margin:0;">📋 Контроль выполнения</h2>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-warning btn-sm" onclick="App.resetChecklist()">🔄 Сбросить</button>
+                        <button class="btn btn-success btn-sm" onclick="App.syncToGitHub()">☁️ Синхронизировать</button>
+                    </div>
                 </div>
+                
                 <div id="checklistContainer"></div>
-                <div style="display:flex; gap:8px; margin-top:16px;">
-                    <input type="text" id="newItemInput" placeholder="Новый этап..." style="flex:1; padding:12px; border:2px solid var(--border); border-radius:8px;" onkeypress="if(event.key==='Enter')App.addItem()">
-                    <button class="btn btn-primary" onclick="App.addItem()" style="width:auto;">+</button>
+                
+                <div style="display:flex; gap:10px; margin-top:18px;">
+                    <input type="text" id="newItemInput" placeholder="Название нового этапа..." style="flex:1; padding:14px; border:2px solid var(--border); border-radius:10px; font-size:16px;" onkeypress="if(event.key==='Enter')App.addItem()">
+                    <button class="btn btn-primary" onclick="App.addItem()" style="width:auto; padding:14px 20px;">+</button>
                 </div>
-                <div style="margin-top:16px; text-align:center;">
-                    <strong id="statsText"></strong>
-                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                
+                <div style="margin-top:20px; text-align:center;">
+                    <strong id="statsText" style="font-size:15px;"></strong>
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
                 </div>
+                <p style="text-align:center; font-size:12px; color:var(--text-light); margin-top:6px;" id="syncStatus">💾 Данные на этом устройстве</p>
             </div>
         </div>
 
-        <!-- Страница магазина -->
+        <!-- ==================== МАГАЗИН ==================== -->
         <div class="page" id="shopPage">
             <div class="card">
                 <h2>🛒 Где купить материалы</h2>
-                <p style="color:var(--text-light); margin-bottom:20px;">Нажмите на карточку, чтобы перейти к покупке</p>
+                <p style="color:var(--text-light);">Нажмите на карточку, чтобы перейти к покупке.</p>
                 <div class="marketplace-grid">
-                    <a href="#" class="marketplace-card wb" id="wbLink" target="_blank">
+                    <a href="https://www.wildberries.ru/catalog/0/search.aspx?search=канцтовары%20учебники" target="_blank" class="marketplace-card" rel="noopener">
                         <div class="marketplace-icon">🟣</div>
                         <strong>Wildberries</strong>
-                        <p style="font-size:12px; color:var(--text-light);">Канцтовары, бумага, учебники</p>
+                        <p style="font-size:12px; color:var(--text-light);">Канцтовары, бумага</p>
                     </a>
-                    <a href="#" class="marketplace-card ozon" id="ozonLink" target="_blank">
+                    <a href="https://www.ozon.ru/search/?text=учебники+канцтовары" target="_blank" class="marketplace-card" rel="noopener">
                         <div class="marketplace-icon">🔵</div>
                         <strong>Ozon</strong>
-                        <p style="font-size:12px; color:var(--text-light);">Книги, методички, техника</p>
+                        <p style="font-size:12px; color:var(--text-light);">Книги, методички</p>
                     </a>
-                    <a href="#" class="marketplace-card" id="chitaiLink" target="_blank" style="--hover-color: #e74c3c;">
+                    <a href="https://www.chitai-gorod.ru/search?phrase=учебная%20литература" target="_blank" class="marketplace-card" rel="noopener">
                         <div class="marketplace-icon">📚</div>
                         <strong>Читай-город</strong>
                         <p style="font-size:12px; color:var(--text-light);">Учебная литература</p>
                     </a>
-                    <a href="#" class="marketplace-card" id="ozRuLink" target="_blank" style="--hover-color: #f90;">
+                    <a href="https://market.yandex.ru/search?text=канцтовары%20для%20учёбы" target="_blank" class="marketplace-card" rel="noopener">
                         <div class="marketplace-icon">🛍️</div>
-                        <strong>OZON</strong>
+                        <strong>Яндекс.Маркет</strong>
                         <p style="font-size:12px; color:var(--text-light);">Всё для учёбы</p>
                     </a>
-                </div>
-                <div style="margin-top:20px; padding:16px; background:#f0f0ff; border-radius:8px; font-size:14px;">
-                    <strong>💡 Совет:</strong> Добавьте эти ссылки в закладки. При покупке через партнёрские ссылки вы поддерживаете проект!
                 </div>
             </div>
         </div>
 
-        <!-- Страница профиля -->
+        <!-- ==================== ПОДДЕРЖАТЬ ==================== -->
+        <div class="page" id="donatePage">
+            <div class="card">
+                <h2>❤️ Поддержать проект</h2>
+                <p style="color:var(--text-light);">Отсканируйте QR-код через банковское приложение (Сбер, Тинькофф, Альфа...)</p>
+                
+                <div class="donate-container">
+                    <div class="donate-qr">
+                        <h3>QR-код для СБП</h3>
+                        <img id="qrCodeImage" src="" alt="QR-код СБП" style="width:200px; height:200px; background:#eee; border-radius:8px;">
+                        <p style="font-size:12px; color:var(--text-light); margin-top:8px;">Через Систему быстрых платежей</p>
+                    </div>
+                    
+                    <div class="donate-info">
+                        <div class="highlight">
+                            <strong>💳 Как оплатить:</strong>
+                            <ol style="margin-top:8px; padding-left:20px;">
+                                <li>Откройте банковское приложение</li>
+                                <li>Найдите «Оплата по QR-коду» или «СБП»</li>
+                                <li>Наведите камеру на код</li>
+                                <li>Подтвердите платёж</li>
+                            </ol>
+                        </div>
+                        
+                        <p style="margin-top:16px;"><strong>Выберите сумму:</strong></p>
+                        <div class="donate-amounts">
+                            <span class="donate-amount selected" data-amount="100">100 ₽</span>
+                            <span class="donate-amount" data-amount="300">300 ₽</span>
+                            <span class="donate-amount" data-amount="500">500 ₽</span>
+                            <span class="donate-amount" data-amount="1000">1000 ₽</span>
+                        </div>
+                        <input type="number" id="customAmount" placeholder="Своя сумма" style="width:100%; padding:12px; margin-top:8px; border:2px solid var(--border); border-radius:10px; font-size:16px;">
+                        
+                        <button class="btn btn-primary" onclick="App.openSBP()" style="margin-top:12px;">
+                            💳 Оплатить через СБП
+                        </button>
+                        <p style="font-size:12px; color:var(--text-light); margin-top:8px;">Комиссия 0.4-0.7%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ПРОФИЛЬ ==================== -->
         <div class="page" id="profilePage">
             <div class="card">
                 <h2>👤 Профиль</h2>
                 <div class="form-group"><label>Имя</label><input type="text" id="profileName"></div>
-                <div class="form-group"><label>Email</label><input type="email" id="profileEmail"></div>
-                <div class="form-group"><label>Логин</label><input type="text" id="profileLogin" disabled style="background:#eee;"></div>
-                <div class="form-group"><label>Роль</label><input type="text" id="profileRole" disabled style="background:#eee;"></div>
-                <button class="btn btn-primary" onclick="App.updateProfile()">Сохранить</button>
-                <button class="btn btn-outline" onclick="App.showResetPasswordFromProfile()" style="width:100%; margin-top:8px;">Сменить пароль</button>
+                <div class="form-group"><label>Логин</label><input type="text" id="profileLogin" disabled></div>
+                <div class="form-group"><label>Роль</label><input type="text" id="profileRole" disabled></div>
+                <button class="btn btn-primary" onclick="App.updateProfile()">💾 Сохранить</button>
+                <button class="btn btn-outline" onclick="App.showPage('resetPage')">🔑 Сменить пароль</button>
+                <button class="btn btn-outline" onclick="App.logout()" style="color:var(--danger); border-color:var(--danger);">🚪 Выйти</button>
                 <div class="message success" id="profileSuccess"></div>
             </div>
         </div>
 
-        <!-- Страница админа -->
+        <!-- ==================== АДМИН ==================== -->
         <div class="page" id="adminPage">
             <div class="card">
                 <h2>⚙️ Администрирование</h2>
-                <table id="usersTable" style="width:100%; border-collapse:collapse;">
-                    <thead><tr style="background:var(--bg);"><th style="padding:8px;">Логин</th><th style="padding:8px;">Имя</th><th style="padding:8px;">Роль</th><th style="padding:8px;">Действия</th></tr></thead>
+                <table>
+                    <thead><tr><th>Логин</th><th>Имя</th><th>Роль</th><th>Действия</th></tr></thead>
                     <tbody id="usersTableBody"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer"></div>
 
     <script>
-    // ==================== Хеширование ====================
+    // ==================== КОНФИГУРАЦИЯ (ТОЛЬКО ТО, ЧТО НУЖНО) ====================
+    const CONFIG = {
+        // Ссылка СБП (получить в банковском приложении: Платежи → СБП → QR-код → Поделиться)
+        SBP_LINK: 'https://c2c.cbrpay.ru/AS1I0054D6206P0386PRNCKTFB9C3A90',
+        
+        // GitHub (опционально — для синхронизации между устройствами)
+        GITHUB_USER: '', // ← вставь свой GitHub username
+        GITHUB_REPO: '', // ← вставь название репозитория
+    };
+
+    // ==================== ХЕШИРОВАНИЕ ====================
     async function sha256(msg) {
         const buf = new TextEncoder().encode(msg);
         const hash = await crypto.subtle.digest('SHA-256', buf);
         return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // ==================== Приложение ====================
+    // ==================== ПРИЛОЖЕНИЕ ====================
     const App = (() => {
         const DEFAULT_USERS = [
-            { login: 'admin', passwordHash: '', name: 'Администратор', role: 'admin', email: 'admin@example.com' },
-            { login: 'user1', passwordHash: '', name: 'Студент Юмашев', role: 'student', email: 'user1@example.com' },
-            { login: 'user2', passwordHash: '', name: 'Студент Уточкин', role: 'student', email: 'user2@example.com' },
+            { login: 'admin', passwordHash: '', name: 'Администратор', role: 'admin' },
+            { login: 'user1', passwordHash: '', name: 'Студент Юмашев', role: 'student' },
+            { login: 'user2', passwordHash: '', name: 'Студент Уточкин', role: 'student' },
         ];
-        const DEFAULT_ITEMS = ['Титульный лист', 'Содержание', 'Введение', 'Основная часть', 'Заключение', 'Список источников'];
+        const DEFAULT_ITEMS = [
+            'Титульный лист', 'Содержание', 'Введение',
+            'Основная часть (2-3 главы)', 'Заключение', 'Список источников',
+        ];
         const MAX_LOGIN_ATTEMPTS = 5;
-        const BLOCK_DURATION = 5 * 60 * 1000; // 5 минут
+        const BLOCK_DURATION = 5 * 60 * 1000;
 
         let currentUser = null;
         let checklistItems = [];
         let loginAttempts = {};
+        let selectedAmount = 100;
 
-        // Инициализация
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         async function init() {
-            // Загружаем попытки входа
-            const saved = localStorage.getItem('login_attempts');
-            if (saved) loginAttempts = JSON.parse(saved);
+            const att = localStorage.getItem('login_attempts');
+            if (att) loginAttempts = JSON.parse(att);
 
-            // Инициализируем стандартные пароли
             const passwords = { admin: 'admin123', user1: '123qwe', user2: 'password456' };
             const users = getAllUsers();
             let updated = false;
@@ -363,20 +429,67 @@
             }
             if (updated) saveAllUsers(users);
 
-            // Проверка сессии
+            generateQRCode();
+            setupDonateButtons();
+            setupNavTabs();
             checkSession();
-            // Настройка маркетплейсов
-            setupMarketplaceLinks();
+            setupEnterKey();
         }
 
-        function setupMarketplaceLinks() {
-            const query = encodeURIComponent('канцтовары учебники методички');
-            document.getElementById('wbLink').href = `https://www.wildberries.ru/catalog/0/search.aspx?search=${query}`;
-            document.getElementById('ozonLink').href = `https://www.ozon.ru/search/?text=${query}`;
-            document.getElementById('chitaiLink').href = `https://www.chitai-gorod.ru/search?phrase=${query}`;
-            document.getElementById('ozRuLink').href = `https://www.ozon.ru/search/?text=${query}`;
+        function generateQRCode() {
+            const link = CONFIG.SBP_LINK;
+            const img = document.getElementById('qrCodeImage');
+            if (link && !link.includes('ЗАМЕНИТЬ')) {
+                img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}&margin=10`;
+            } else {
+                img.src = 'data:image/svg+xml,' + encodeURIComponent(
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">' +
+                    '<rect width="200" height="200" fill="#eee"/>' +
+                    '<text x="100" y="85" text-anchor="middle" font-size="13" fill="#999">Замените</text>' +
+                    '<text x="100" y="105" text-anchor="middle" font-size="13" fill="#999">SBP_LINK</text>' +
+                    '<text x="100" y="125" text-anchor="middle" font-size="13" fill="#999">в CONFIG</text>' +
+                    '</svg>'
+                );
+            }
         }
 
+        function setupDonateButtons() {
+            document.querySelectorAll('.donate-amount').forEach(el => {
+                el.addEventListener('click', function() {
+                    document.querySelectorAll('.donate-amount').forEach(e => e.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAmount = parseInt(this.dataset.amount);
+                    document.getElementById('customAmount').value = '';
+                });
+            });
+            document.getElementById('customAmount').addEventListener('input', function() {
+                if (this.value) {
+                    document.querySelectorAll('.donate-amount').forEach(e => e.classList.remove('selected'));
+                    selectedAmount = parseInt(this.value) || 100;
+                }
+            });
+        }
+
+        function setupNavTabs() {
+            document.getElementById('navTabs').addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-tab')) {
+                    const page = e.target.dataset.page;
+                    updateNavTabs(page);
+                    showPage(page + 'Page');
+                    if (page === 'checklist') renderAll();
+                    if (page === 'profile') showProfile();
+                    if (page === 'admin') showAdmin();
+                }
+            });
+        }
+
+        function setupEnterKey() {
+            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') login();
+            });
+        }
+
+        // ==================== ДАННЫЕ ====================
         function getAllUsers() {
             const saved = localStorage.getItem('app_users');
             if (saved) { try { return JSON.parse(saved); } catch(e){} }
@@ -400,90 +513,71 @@
         }
 
         function showPage(pageId) {
-            ['loginPage','registerPage','resetPage','checklistPage','shopPage','profilePage','adminPage'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.remove('active');
-            });
+            ['loginPage','registerPage','resetPage','checklistPage','shopPage','donatePage','profilePage','adminPage']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
             const page = document.getElementById(pageId);
             if (page) page.classList.add('active');
 
-            const navTabs = document.getElementById('navTabs');
-            if (['checklistPage','shopPage','profilePage','adminPage'].includes(pageId)) {
-                navTabs.style.display = 'flex';
-            } else {
-                navTabs.style.display = 'none';
-            }
+            const mainPages = ['checklistPage','shopPage','donatePage','profilePage','adminPage'];
+            document.getElementById('navTabs').style.display = mainPages.includes(pageId) ? 'flex' : 'none';
         }
 
         function showMainUI() {
             showPage('checklistPage');
             document.getElementById('navTabs').style.display = 'flex';
-            if (currentUser.role === 'admin') document.getElementById('adminTab').style.display = 'block';
+            document.getElementById('adminTab').style.display = currentUser.role === 'admin' ? 'block' : 'none';
             loadChecklist();
             renderAll();
             updateNavTabs('checklist');
         }
 
-        function updateNavTabs(activePage) {
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.dataset.page === activePage) tab.classList.add('active');
+        function updateNavTabs(active) {
+            document.querySelectorAll('.nav-tab').forEach(t => {
+                t.classList.remove('active');
+                if (t.dataset.page === active) t.classList.add('active');
             });
         }
 
-        // Навигация по табам
-        document.getElementById('navTabs').addEventListener('click', (e) => {
-            if (e.target.classList.contains('nav-tab')) {
-                const page = e.target.dataset.page;
-                updateNavTabs(page);
-                if (page === 'checklist') { showPage('checklistPage'); renderAll(); }
-                if (page === 'shop') showPage('shopPage');
-                if (page === 'profile') showProfile();
-                if (page === 'admin') showAdmin();
-            }
-        });
-
-        // ==================== Авторизация ====================
+        // ==================== АВТОРИЗАЦИЯ ====================
         async function login() {
-            const login = document.getElementById('loginInput').value.trim();
+            const loginVal = document.getElementById('loginInput').value.trim();
             const password = document.getElementById('passwordInput').value;
             const errorEl = document.getElementById('loginError');
             const blockedEl = document.getElementById('loginBlocked');
 
-            // Проверка блокировки
-            const attempt = loginAttempts[login] || { count: 0, blockedUntil: 0 };
+            const attempt = loginAttempts[loginVal] || { count: 0, blockedUntil: 0 };
             if (attempt.blockedUntil > Date.now()) {
                 blockedEl.style.display = 'block';
-                const mins = Math.ceil((attempt.blockedUntil - Date.now()) / 60000);
-                blockedEl.textContent = `⚠️ Вход заблокирован на ${mins} мин.`;
+                blockedEl.textContent = `⚠️ Вход заблокирован на ${Math.ceil((attempt.blockedUntil - Date.now()) / 60000)} мин.`;
                 return;
             }
             blockedEl.style.display = 'none';
 
-            if (!login || !password) { errorEl.textContent = 'Заполните все поля'; return; }
+            if (!loginVal || !password) { errorEl.textContent = 'Заполните все поля'; return; }
 
             const users = getAllUsers();
             const hash = await sha256(password);
-            const user = users.find(u => u.login === login && u.passwordHash === hash);
+            const user = users.find(u => u.login === loginVal && u.passwordHash === hash);
 
             if (user) {
-                loginAttempts[login] = { count: 0, blockedUntil: 0 };
+                loginAttempts[loginVal] = { count: 0, blockedUntil: 0 };
                 localStorage.setItem('login_attempts', JSON.stringify(loginAttempts));
                 currentUser = user;
                 localStorage.setItem('app_session', JSON.stringify({
                     login: user.login,
-                    expires: Date.now() + 30*24*60*60*1000
+                    expires: Date.now() + 30*24*60*60*1000,
                 }));
                 errorEl.textContent = '';
                 showMainUI();
-                toast('Добро пожаловать, ' + user.name + '!', 'success');
+                toast('👋 Добро пожаловать, ' + user.name + '!', 'success');
             } else {
                 attempt.count = (attempt.count || 0) + 1;
                 if (attempt.count >= MAX_LOGIN_ATTEMPTS) {
                     attempt.blockedUntil = Date.now() + BLOCK_DURATION;
                     blockedEl.style.display = 'block';
+                    blockedEl.textContent = '⚠️ Вход заблокирован на 5 минут.';
                 }
-                loginAttempts[login] = attempt;
+                loginAttempts[loginVal] = attempt;
                 localStorage.setItem('login_attempts', JSON.stringify(loginAttempts));
                 errorEl.textContent = 'Неверный логин или пароль';
                 document.getElementById('passwordInput').value = '';
@@ -492,25 +586,20 @@
 
         async function register() {
             const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const login = document.getElementById('regLogin').value.trim();
+            const loginVal = document.getElementById('regLogin').value.trim();
             const password = document.getElementById('regPassword').value;
             const errorEl = document.getElementById('regError');
             const successEl = document.getElementById('regSuccess');
             errorEl.textContent = ''; successEl.textContent = '';
 
-            if (!name || !email || !login || !password) { errorEl.textContent = 'Все поля обязательны'; return; }
-            if (login.length < 3) { errorEl.textContent = 'Логин: минимум 3 символа'; return; }
+            if (!name || !loginVal || !password) { errorEl.textContent = 'Все поля обязательны'; return; }
+            if (loginVal.length < 3) { errorEl.textContent = 'Логин: минимум 3 символа'; return; }
             if (password.length < 4) { errorEl.textContent = 'Пароль: минимум 4 символа'; return; }
-            if (!email.includes('@')) { errorEl.textContent = 'Введите корректный email'; return; }
 
             const users = getAllUsers();
-            if (users.find(u => u.login === login)) { errorEl.textContent = 'Логин занят'; return; }
-            if (users.find(u => u.email === email)) { errorEl.textContent = 'Email уже используется'; return; }
+            if (users.find(u => u.login === loginVal)) { errorEl.textContent = 'Логин занят'; return; }
 
-            const newUser = {
-                login, passwordHash: await sha256(password), name, email, role: 'student'
-            };
+            const newUser = { login: loginVal, passwordHash: await sha256(password), name, role: 'student' };
             users.push(newUser);
             saveAllUsers(users);
 
@@ -519,7 +608,7 @@
                 currentUser = newUser;
                 localStorage.setItem('app_session', JSON.stringify({
                     login: newUser.login,
-                    expires: Date.now() + 30*24*60*60*1000
+                    expires: Date.now() + 30*24*60*60*1000,
                 }));
                 showMainUI();
             }, 1500);
@@ -527,8 +616,8 @@
 
         function logout() {
             currentUser = null;
-            localStorage.removeItem('app_session');
             checklistItems = [];
+            localStorage.removeItem('app_session');
             showPage('loginPage');
             document.getElementById('loginInput').value = '';
             document.getElementById('passwordInput').value = '';
@@ -536,91 +625,301 @@
             document.getElementById('loginBlocked').style.display = 'none';
         }
 
-        // ==================== Профиль ====================
+        // ==================== ВОССТАНОВЛЕНИЕ ПАРОЛЯ ====================
+        function sendResetCode() {
+            const loginVal = document.getElementById('resetLogin').value.trim();
+            const errorEl = document.getElementById('resetError');
+            errorEl.textContent = '';
+            document.getElementById('resetSuccess').textContent = '';
+
+            if (!loginVal) { errorEl.textContent = 'Введите логин'; return; }
+
+            const users = getAllUsers();
+            const user = users.find(u => u.login === loginVal);
+            if (!user) { errorEl.textContent = 'Пользователь не найден'; return; }
+
+            // Генерируем код и показываем на экране (демо-режим)
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            localStorage.setItem('reset_code_' + loginVal, JSON.stringify({
+                code, expires: Date.now() + 600000,
+            }));
+
+            document.getElementById('resetCodeDisplay').textContent = code;
+            document.getElementById('resetCodeSection').style.display = 'block';
+            document.getElementById('resetError').textContent = '';
+            
+            toast('🔑 Код восстановления показан на экране', 'info');
+        }
+
+        async function resetPassword() {
+            const loginVal = document.getElementById('resetLogin').value.trim();
+            const code = document.getElementById('resetCodeInput').value.trim();
+            const newPassword = document.getElementById('resetNewPassword').value;
+            const errorEl = document.getElementById('resetError');
+            const successEl = document.getElementById('resetSuccess');
+            errorEl.textContent = ''; successEl.textContent = '';
+
+            const saved = localStorage.getItem('reset_code_' + loginVal);
+            if (!saved) { errorEl.textContent = 'Сначала получите код'; return; }
+
+            const data = JSON.parse(saved);
+            if (data.expires < Date.now()) { errorEl.textContent = 'Код истёк. Получите новый.'; return; }
+            if (data.code !== code) { errorEl.textContent = 'Неверный код'; return; }
+            if (newPassword.length < 4) { errorEl.textContent = 'Пароль: минимум 4 символа'; return; }
+
+            const users = getAllUsers();
+            const user = users.find(u => u.login === loginVal);
+            if (!user) { errorEl.textContent = 'Пользователь не найден'; return; }
+
+            user.passwordHash = await sha256(newPassword);
+            saveAllUsers(users);
+            localStorage.removeItem('reset_code_' + loginVal);
+
+            successEl.textContent = '✅ Пароль изменён! Сейчас войдём...';
+            document.getElementById('resetCodeSection').style.display = 'none';
+
+            setTimeout(() => {
+                currentUser = user;
+                localStorage.setItem('app_session', JSON.stringify({
+                    login: user.login,
+                    expires: Date.now() + 30*24*60*60*1000,
+                }));
+                showMainUI();
+            }, 1500);
+        }
+
+        // ==================== ПРОФИЛЬ ====================
         function showProfile() {
             showPage('profilePage');
             document.getElementById('profileName').value = currentUser.name;
-            document.getElementById('profileEmail').value = currentUser.email || '';
             document.getElementById('profileLogin').value = currentUser.login;
             document.getElementById('profileRole').value = currentUser.role;
         }
 
         function updateProfile() {
             const name = document.getElementById('profileName').value.trim();
-            const email = document.getElementById('profileEmail').value.trim();
-            if (!name || !email) { toast('Заполните поля', 'error'); return; }
+            if (!name) { toast('Введите имя', 'error'); return; }
 
             const users = getAllUsers();
             const user = users.find(u => u.login === currentUser.login);
-            if (user) { user.name = name; user.email = email; }
+            if (user) user.name = name;
             saveAllUsers(users);
             currentUser.name = name;
-            currentUser.email = email;
-            document.getElementById('profileSuccess').textContent = '✅ Сохранено!';
-            setTimeout(() => document.getElementById('profileSuccess').textContent = '', 2000);
+            document.getElementById('profileSuccess').textContent = '✅ Изменения сохранены!';
+            setTimeout(() => document.getElementById('profileSuccess').textContent = '', 2500);
+            toast('💾 Профиль обновлён', 'success');
         }
 
-        // ==================== Восстановление пароля ====================
-        function showResetPassword() { showPage('resetPage'); }
-        function showResetPasswordFromProfile() { showPage('resetPage'); }
-        function showRegister() { showPage('registerPage'); }
-        function showLogin() { showPage('loginPage'); }
-
-        async function sendResetCode() {
-            const email = document.getElementById('resetEmail').value.trim();
-            const errorEl = document.getElementById('resetError');
-            if (!email) { errorEl.textContent = 'Введите email'; return; }
-
-            const users = getAllUsers();
-            const user = users.find(u => u.email === email);
-            if (!user) { errorEl.textContent = 'Email не найден'; return; }
-
-            // В реальном проекте — отправка через API (SendGrid, Mailgun и т.д.)
-            const code = Math.floor(100000 + Math.random() * 900000).toString();
-            localStorage.setItem('reset_code_' + email, JSON.stringify({ code, expires: Date.now() + 600000 }));
-
-            document.getElementById('resetCodeGroup').style.display = 'block';
-            document.getElementById('sendResetBtn').disabled = true;
-            document.getElementById('sendResetBtn').textContent = 'Код отправлен (проверьте консоль)';
-            document.getElementById('resetError').textContent = '';
-            console.log(`🔑 Код восстановления для ${email}: ${code}`);
-            toast('Код отправлен (проверьте консоль браузера)', 'success');
-        }
-
-        async function resetPassword() {
-            const email = document.getElementById('resetEmail').value.trim();
-            const code = document.getElementById('resetCode').value.trim();
-            const newPassword = document.getElementById('resetNewPassword').value;
-            const errorEl = document.getElementById('resetError');
-            const successEl = document.getElementById('resetSuccess');
-
-            const saved = localStorage.getItem('reset_code_' + email);
-            if (!saved) { errorEl.textContent = 'Сначала отправьте код'; return; }
-
-            const data = JSON.parse(saved);
-            if (data.expires < Date.now()) { errorEl.textContent = 'Код истёк'; return; }
-            if (data.code !== code) { errorEl.textContent = 'Неверный код'; return; }
-            if (newPassword.length < 4) { errorEl.textContent = 'Пароль: минимум 4 символа'; return; }
-
-            const users = getAllUsers();
-            const user = users.find(u => u.email === email);
-            user.passwordHash = await sha256(newPassword);
-            saveAllUsers(users);
-            localStorage.removeItem('reset_code_' + email);
-
-            successEl.textContent = '✅ Пароль изменён!';
-            setTimeout(() => showLogin(), 1500);
-        }
-
-        // ==================== Админка ====================
+        // ==================== АДМИН ====================
         function showAdmin() {
             showPage('adminPage');
             const users = getAllUsers();
-            const tbody = document.getElementById('usersTableBody');
-            tbody.innerHTML = users.map(u => `
+            document.getElementById('usersTableBody').innerHTML = users.map(u => `
                 <tr>
-                    <td style="padding:8px;">${u.login}</td>
-                    <td style="padding:8px;">${u.name}</td>
-                    <td style="padding:8px;">${u.role}</td>
-                    <td style="padding:8px;">
-                        <button class="btn btn-warning" style="padding:4px 8px; font-size:12px;" onclick="App.changeRole('${u.login}')">Сменить роль</button
+                    <td>${u.login}</td>
+                    <td>${u.name}</td>
+                    <td><span style="background:#e8f5e9; color:#2e7d32; padding:2px 10px; border-radius:12px; font-size:12px;">${u.role}</span></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="App.changeRole('${u.login}')">Сменить роль</button>
+                        <button class="btn btn-danger btn-sm" onclick="App.deleteUser('${u.login}')">Удалить</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function changeRole(login) {
+            const roles = ['student', 'teacher', 'admin'];
+            const user = getAllUsers().find(u => u.login === login);
+            const idx = roles.indexOf(user.role);
+            const newRole = roles[(idx + 1) % roles.length];
+            if (confirm(`Сменить роль ${login} на ${newRole}?`)) {
+                const users = getAllUsers();
+                users.find(u => u.login === login).role = newRole;
+                saveAllUsers(users);
+                showAdmin();
+                toast('✅ Роль обновлена', 'success');
+            }
+        }
+
+        function deleteUser(login) {
+            if (login === 'admin') { toast('Нельзя удалить админа', 'error'); return; }
+            if (confirm(`Удалить пользователя ${login}?`)) {
+                let users = getAllUsers();
+                users = users.filter(u => u.login !== login);
+                saveAllUsers(users);
+                showAdmin();
+                toast('🗑 Пользователь удалён', 'info');
+            }
+        }
+
+        // ==================== ЧЕКЛИСТ ====================
+        function loadChecklist() {
+            const key = `checklist_${currentUser.login}`;
+            const saved = localStorage.getItem(key);
+            if (saved) { try { checklistItems = JSON.parse(saved); return; } catch(e){} }
+            checklistItems = DEFAULT_ITEMS.map((t, i) => ({ id: Date.now()+i, text:t, completed:false, order:i }));
+            saveChecklist();
+        }
+
+        function saveChecklist() {
+            if (!currentUser) return;
+            localStorage.setItem(`checklist_${currentUser.login}`, JSON.stringify(checklistItems));
+        }
+
+        function renderAll() {
+            const container = document.getElementById('checklistContainer');
+            if (!container) return;
+            const sorted = [...checklistItems].sort((a,b) => (a.order||0)-(b.order||0));
+            container.innerHTML = sorted.map(item => `
+                <div class="checklist-item">
+                    <input type="checkbox" ${item.completed?'checked':''} onchange="App.toggleComplete(${item.id})">
+                    <span class="item-text ${item.completed?'completed':''}">${escapeHTML(item.text)}</span>
+                    <button class="btn btn-sm" style="background:transparent; color:var(--danger);" onclick="App.deleteItem(${item.id})">✕</button>
+                </div>
+            `).join('');
+
+            const total = checklistItems.length;
+            const done = checklistItems.filter(i => i.completed).length;
+            const pct = total ? Math.round(done/total*100) : 0;
+            document.getElementById('statsText').textContent = `Выполнено ${done} из ${total} (${pct}%)`;
+            document.getElementById('progressFill').style.width = pct + '%';
+        }
+
+        function addItem() {
+            const input = document.getElementById('newItemInput');
+            const text = input.value.trim();
+            if (!text) { toast('Введите название этапа', 'error'); return; }
+            checklistItems.push({ id:Date.now(), text, completed:false, order:checklistItems.length });
+            saveChecklist(); renderAll();
+            input.value = ''; input.focus();
+            toast('✅ Этап добавлен', 'success');
+        }
+
+        function deleteItem(id) {
+            checklistItems = checklistItems.filter(i => i.id !== id);
+            checklistItems.forEach((item, i) => item.order = i);
+            saveChecklist(); renderAll();
+        }
+
+        function toggleComplete(id) {
+            const item = checklistItems.find(i => i.id === id);
+            if (item) { item.completed = !item.completed; saveChecklist(); renderAll(); }
+        }
+
+        function resetChecklist() {
+            if (confirm('Сбросить чеклист к шаблону?')) {
+                checklistItems = DEFAULT_ITEMS.map((t,i)=>({ id:Date.now()+i, text:t, completed:false, order:i }));
+                saveChecklist(); renderAll();
+                toast('🔄 Чеклист сброшен', 'info');
+            }
+        }
+
+        // ==================== СИНХРОНИЗАЦИЯ ЧЕРЕЗ GITHUB ====================
+        function syncToGitHub() {
+            if (!CONFIG.GITHUB_USER || !CONFIG.GITHUB_REPO) {
+                toast('⚠️ Настройте GITHUB_USER и GITHUB_REPO в CONFIG', 'error');
+                document.getElementById('syncStatus').textContent = '⚠️ Синхронизация не настроена';
+                return;
+            }
+
+            document.getElementById('syncStatus').textContent = '⏳ Синхронизация...';
+
+            // Сохраняем данные в localStorage с меткой времени
+            const syncData = {
+                login: currentUser.login,
+                items: checklistItems,
+                updatedAt: new Date().toISOString(),
+            };
+            localStorage.setItem(`sync_${currentUser.login}`, JSON.stringify(syncData));
+
+            // Пытаемся загрузить данные из GitHub Issues
+            loadFromGitHub().then(loaded => {
+                if (loaded) {
+                    document.getElementById('syncStatus').textContent = '✅ Синхронизировано ' + new Date().toLocaleTimeString();
+                    toast('☁️ Данные синхронизированы', 'success');
+                } else {
+                    document.getElementById('syncStatus').textContent = '💾 Сохранено локально (GitHub не настроен)';
+                    toast('💾 Сохранено локально', 'info');
+                }
+            });
+        }
+
+        async function loadFromGitHub() {
+            if (!CONFIG.GITHUB_USER || !CONFIG.GITHUB_REPO) return false;
+
+            try {
+                // Ищем Issue с меткой пользователя
+                const url = `https://api.github.com/repos/${CONFIG.GITHUB_USER}/${CONFIG.GITHUB_REPO}/issues?labels=sync,${currentUser.login}&state=open&per_page=1`;
+                const response = await fetch(url);
+
+                if (response.ok) {
+                    const issues = await response.json();
+                    if (issues.length > 0) {
+                        const body = issues[0].body;
+                        const data = JSON.parse(body);
+                        
+                        // Сравниваем даты
+                        const localData = localStorage.getItem(`sync_${currentUser.login}`);
+                        const local = localData ? JSON.parse(localData) : null;
+
+                        if (!local || data.updatedAt > local.updatedAt) {
+                            checklistItems = data.items;
+                            saveChecklist();
+                            renderAll();
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            } catch (e) {
+                console.log('GitHub API недоступен (работаем офлайн)');
+                return false;
+            }
+        }
+
+        // ==================== СБП ====================
+        function openSBP() {
+            const customAmount = document.getElementById('customAmount').value;
+            const amount = customAmount ? parseInt(customAmount) : selectedAmount;
+            
+            if (!amount || amount < 10) {
+                toast('Введите сумму (минимум 10 ₽)', 'error');
+                return;
+            }
+
+            const link = CONFIG.SBP_LINK;
+            if (link && !link.includes('ЗАМЕНИТЬ')) {
+                window.open(link, '_blank');
+                toast(`💳 Открыта оплата на ${amount} ₽`, 'info');
+            } else {
+                toast('⚠️ Настройте SBP_LINK в CONFIG', 'error');
+            }
+        }
+
+        // ==================== УТИЛИТЫ ====================
+        function escapeHTML(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+        function toast(msg, type='info') {
+            const container = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.textContent = msg;
+            container.appendChild(t);
+            setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
+        }
+
+        return {
+            init, showPage, login, register, logout,
+            sendResetCode, resetPassword,
+            showProfile, updateProfile,
+            showAdmin, changeRole, deleteUser,
+            addItem, deleteItem, toggleComplete, resetChecklist,
+            syncToGitHub, openSBP,
+        };
+    })();
+
+    document.addEventListener('DOMContentLoaded', () => App.init());
+    window.App = App;
+    </script>
+</body>
+</html>
